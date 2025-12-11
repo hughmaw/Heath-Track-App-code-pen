@@ -60,7 +60,7 @@ html {
   justify-content: left;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 40px 20px;  /* Add some padding around the boxes */
+  padding: 40px; /* Add some padding around the boxes */
 }
 
 .box {
@@ -68,7 +68,7 @@ html {
   height: 240px;
   background-color: white;
   border-radius: 20px;
-  border: 4px dashed #E5F3FD;
+  border: 4px dashed #272829;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;  /* Smooth hover effect */
 }
