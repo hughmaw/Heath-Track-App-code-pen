@@ -79,8 +79,8 @@ html {
 }
 
 .circle-icon {
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     background-color: #ea1313;
     border-radius: 50%;
     display: flex;
@@ -89,7 +89,7 @@ html {
     margin: 20px auto 10px auto; /* Center the circle and add spacing */
 }
 .circle-icon svg {
-    width: 200px;
-    height: 200px;
+    width: 110px;
+    height: 110px;
     color: white;
 }
