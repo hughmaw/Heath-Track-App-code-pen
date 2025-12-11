@@ -54,3 +54,14 @@ html {
     width: 20px;
     height: 20px;
 }
+
+.box {
+  width: 240px;        /* box width */
+  height: 240px;       /* box height */
+  background-color: white;  /* box color */
+  border-radius: 20px; /* ROUND CORNERS */
+  border: 4px dashed #E5F3FD;
+  position: sticky;
+  cursor: pointer; /* react when cursor is on it */
+  
+}
