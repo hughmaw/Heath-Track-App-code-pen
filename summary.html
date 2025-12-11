@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary page</title>
+    <title>Summary Page</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="summary.css">
 </head>
+<body>
+    <div class="header-box">
+        <h1 class="dashboard-title">Summary</h1>
+        <p class="current-date" id="current-date"></p>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+        
+        // Display current date
+        const dateElement = document.getElementById('current-date');
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+    </script>
+</body>
+</html>
