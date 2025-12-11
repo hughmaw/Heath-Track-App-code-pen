@@ -88,3 +88,8 @@ html {
     align-items: center;
     margin: 20px auto 10px auto; /* Center the circle and add spacing */
 }
+.circle-icon svg {
+    width: 200px;
+    height: 200px;
+    color: white;
+}
