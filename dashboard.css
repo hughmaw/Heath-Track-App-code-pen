@@ -7,6 +7,32 @@ body { background-color: #f5f7fa; }
   gap: 20px;  
 }
 
+.header-box {
+    background-color: white;
+    border-radius: 20px;
+    border: 4px solid #E5F3FD;
+    padding: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-title {
+    font-family: Helvetica, sans-serif;
+    font-size: 36px;
+    color: black;
+    font-weight: 600;
+    margin: 0;
+}
+
+.current-date {
+    font-family: Helvetica, sans-serif;
+    font-size: 18px;
+    color: #667589;
+    margin: 0;
+}
+
 .box {
   width: 480px;        /* box width */
   height: 240px;       /* box height */
@@ -67,3 +93,4 @@ body { background-color: #f5f7fa; }
     height: 60px;
     color: white;
 }
+
