@@ -58,3 +58,9 @@ body { background-color: #f5f7fa; }
 .pink {
   background-color: #FBD2D2; /* Light Pink */
 }
+
+.inner-box svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
