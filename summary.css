@@ -43,8 +43,8 @@ html {
     margin: 0;
 }
 .box {
-    width: 400px;
-    height: 300px;
+    width: 80%;
+    height: 60%;
     background-color: white;
     border-radius: 20px;
     border: 4px solid #E5F3FD;
