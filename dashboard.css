@@ -42,6 +42,9 @@ body { background-color: #f5f7fa; }
   background-color: #000000;  
   border-radius: 10px;
   margin: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .red {
   background-color: #E57373; /* Light Red */
