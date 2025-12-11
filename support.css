@@ -43,3 +43,13 @@ html {
     color: #667589;
     margin: 0;
 }
+
+.back-button {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
