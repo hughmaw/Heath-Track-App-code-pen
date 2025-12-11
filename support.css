@@ -77,3 +77,14 @@ html {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   border-color: #B3DFFA;  /* Slightly darker border on hover */
 }
+
+.circle-icon {
+    width: 200px;
+    height: 200px;
+    background-color: #ea1313;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto 10px auto; /* Center the circle and add spacing */
+}
