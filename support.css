@@ -55,13 +55,26 @@ html {
     height: 20px;
 }
 
+.container{
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 40px 20px;  /* Add some padding around the boxes */
+}
+
 .box {
-  width: 240px;        /* box width */
-  height: 240px;       /* box height */
-  background-color: white;  /* box color */
-  border-radius: 20px; /* ROUND CORNERS */
+  width: 240px;
+  height: 240px;
+  background-color: white;
+  border-radius: 20px;
   border: 4px dashed #E5F3FD;
-  position: sticky;
-  cursor: pointer; /* react when cursor is on it */
-  
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;  /* Smooth hover effect */
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-color: #B3DFFA;  /* Slightly darker border on hover */
 }
