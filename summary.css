@@ -1,19 +1,21 @@
-.container{
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;  
-}
-
 body { 
     background-color: #f5f7fa;
     margin: 0;
     padding: 0;
+    font-family: Helvetica, sans-serif;
 }
 
 html {
     margin: 0;
     padding: 0;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: calc(100vh - 200px);
 }
 
 .header-box {
@@ -22,7 +24,7 @@ html {
     border-top: none;
     border-radius: 0 0 20px 20px; 
     padding: 30px;
-    margin: 0 0 30px 0;  /* top right bottom left - cleaner than two margin lines */
+    margin: 0 0 30px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,17 +38,82 @@ html {
     margin: 0;
 }
 
-.current-date {
-    font-family: Helvetica, sans-serif;
-    font-size: 18px;
-    color: #667589;
-    margin: 0;
+.back-button {
+    font-size: 16px;
+    cursor: pointer;
 }
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
+
 .box {
     width: 90%;
-    height: 300%;
+    max-width: 800px;
     background-color: white;
     border-radius: 20px;
     border: 4px solid #E5F3FD;
-    position: sticky;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.box-title {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    margin: 0 0 40px 0;
+    text-align: left;
+}
+
+.icon-circle {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #26C6B8 0%, #1FA89E 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px auto;
+}
+
+.icon-circle svg {
+    width: 60px;
+    height: 60px;
+    color: white;
+}
+
+.ready-text {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    margin: 30px 0 15px 0;
+}
+
+.description-text {
+    font-size: 16px;
+    color: #667589;
+    margin: 0 0 40px 0;
+    line-height: 1.6;
+}
+
+.generate-button {
+    background: linear-gradient(135deg, #26C6B8 0%, #1FA89E 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 18px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.generate-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(38, 198, 184, 0.3);
+}
+
+.generate-button:active {
+    transform: translateY(0);
 }

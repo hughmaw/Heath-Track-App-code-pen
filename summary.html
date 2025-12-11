@@ -3,37 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary Page</title>
+    <title>AI Summary</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="summary.css">
 </head>
 <body>
     <div class="header-box">
-        <h1 class="dashboard-title">Summary</h1>
-        <p class="current-date" id="current-date"></p>
+        <div class="back-button">
+            <a href="index.html" style="text-decoration: none; color: #333; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="arrow-left"></i>
+                <span>Back</span>
+            </a>
+        </div>
+        <h1 class="dashboard-title">AI Summary</h1>
+        <div style="width: 80px;"></div> <!-- Spacer for centering -->
+    </div>
+    
+    <div class="container">
+        <div class="box">
+            <h2 class="box-title">Generate Health Summary</h2>
+            
+            <div class="icon-circle">
+                <i data-lucide="sparkles"></i>
+            </div>
+            
+            <h3 class="ready-text">Ready to create your summary?</h3>
+            <p class="description-text">Generate a comprehensive AI-powered summary of your health journey</p>
+            
+            <button class="generate-button">Press to get an AI summary</button>
+        </div>
     </div>
     
     <script>
         lucide.createIcons();
-        
-        // Display current date
-        const dateElement = document.getElementById('current-date');
-        const today = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateElement.textContent = today.toLocaleDateString('en-US', options);
     </script>
-    <div class="container">
-        <div class="box">
-            <div class="inner-box blue">
-                <i data-lucide="file-text"></i>
-            </div>
-            <p class="text-title">
-                Summary
-            </p>
-            <p class="text-description">
-                Create clear concise summaries to provide to those who need them.
-            </p>
-        </div>
-    </div>
 </body>
 </html>
