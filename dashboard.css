@@ -51,8 +51,17 @@ html {
   border-radius: 20px; /* ROUND CORNERS */
   border: 4px solid #E5F3FD;
   position: sticky;
+  cursor: pointer; /* react when cursor is on it */
   
 }
+.box:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(38, 198, 184, 0.3);
+}
+.box:active{
+  transform: translateY(0);
+}
+
 .text-title {
   font-family: Helvetica, sans-serif;
   font-size: 30px;
