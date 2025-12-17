@@ -115,3 +115,19 @@ html {
 .delete-icon:hover {
   color: #ff4444;
 }
+
+.contact-info {
+  padding: 20px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.contact-info div {
+  margin-bottom: 8px;
+}
+
+.contact-info strong {
+  color: #667589;
+}
