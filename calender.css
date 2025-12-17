@@ -56,8 +56,8 @@ html {
 }
 
 .box {
-    width: 1150px;        /* box width */
-    height: 1150px;       /* box height */
+    width: 400px;        /* box width */
+    height: 400px;       /* box height */
     background-color: white;  /* box color */
     border-radius: 20px; /* ROUND CORNERS */
     border: 1px solid #494a4b;
