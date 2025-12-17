@@ -20,5 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize the new icon - THIS LINE WAS MISSING!
     lucide.createIcons();
+
+    // Add click event to delete icon
+    icon.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent triggering the box click event
+      newBox.remove();
+    });
   });
 });
