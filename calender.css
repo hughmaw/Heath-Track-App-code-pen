@@ -1,4 +1,10 @@
 /* website is at: https://hughmaw.github.io/Heath-Track-App-code-pen/ --> settings --> pages --> top */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .container{
   display: flex;
   justify-content: left;
@@ -55,16 +61,113 @@ html {
     height: 20px;
 }
 
-.box {
-    width: 400px;        /* box width */
-    height: 400px;       /* box height */
-    background-color: white;  /* box color */
-    border-radius: 20px; /* ROUND CORNERS */
-    border: 1px solid #494a4b;
-    position: sticky;
-    cursor: pointer; /* react when cursor is on it */
-    flex-direction: row;     /* Add this line */
-    align-items: center;        
-    justify-content: center; 
-    position: relative;
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.main {
+  padding: 32px 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background-color: hsl(0 0% 100%);
+  border: 1px solid hsl(240 5.9% 90%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  padding: 24px 24px 0;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 24px;
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.appointment {
+  border-left: 4px solid hsl(142.1 76.2% 36.3%);
+  padding: 12px 0 12px 16px;
+  margin-bottom: 16px;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.badge {
+  display: inline-block;
+  background-color: hsl(142.1 76.2% 36.3%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.appointment-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.notify-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.notify-button:hover {
+  background-color: hsl(240 4.8% 95.9%);
+}
+
+.notes {
+  font-size: 0.875rem;
+  color: hsl(240 3.8% 46.1%);
+  margin-top: 8px;
+}
+
+.notes-label {
+  font-weight: 500;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
 }
