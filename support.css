@@ -74,6 +74,7 @@ html {
   display: flex;              
   align-items: center;        
   justify-content: center; 
+  position: relative;
 }
 
 .box:hover {
@@ -96,8 +97,21 @@ html {
     align-items: center;
     margin: 20px auto 10px auto; /* Center the circle and add spacing */
 }
+
 .circle-icon svg {
     width: 99px;
     height: 990px;
     color: white;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  color: #666;
+}
+
+.delete-icon:hover {
+  color: #ff4444;
 }
