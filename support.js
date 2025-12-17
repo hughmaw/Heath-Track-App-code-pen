@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     newBox.appendChild(icon);
     
+    // Add the user profile icon
+    const userIcon = document.createElement('i');
+    userIcon.setAttribute('data-lucide', 'circle-user-round');
+    userIcon.className = 'user-icon';
+    
+    newBox.appendChild(userIcon);
     // Add the contact information
     const infoDiv = document.createElement('div');
     infoDiv.className = 'contact-info';
