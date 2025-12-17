@@ -54,3 +54,17 @@ html {
     width: 20px;
     height: 20px;
 }
+
+.box {
+    width: 1150px;        /* box width */
+    height: 1150px;       /* box height */
+    background-color: white;  /* box color */
+    border-radius: 20px; /* ROUND CORNERS */
+    border: 1px solid #494a4b;
+    position: sticky;
+    cursor: pointer; /* react when cursor is on it */
+    flex-direction: row;     /* Add this line */
+    align-items: center;        
+    justify-content: center; 
+    position: relative;
+}
