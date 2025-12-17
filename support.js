@@ -18,13 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Insert it right after the original box
     originalBox.parentNode.insertBefore(newBox, originalBox.nextSibling);
     
-    // Initialize the new icon - THIS LINE WAS MISSING!
+    // Initialize the new icon
     lucide.createIcons();
 
-    // Add click event to delete icon
-    icon.addEventListener('click', function(e) {
-      e.stopPropagation(); // Prevent triggering the box click event
-      newBox.remove();
+    // Add click event to the newBox itself
+    newBox.addEventListener('click', function(e) {
+      // Check if the clicked element is the delete icon or its SVG child
+      if (e.target.closest('.delete-icon')) {
+        e.stopPropagation();
+        newBox.remove();
+      }
     });
   });
 });
