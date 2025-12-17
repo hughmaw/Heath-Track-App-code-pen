@@ -11,13 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const newBox = document.createElement('div');
       newBox.className = 'box';
       
-      // Add the circle icon to the new box
-      newBox.innerHTML = `
-        <div class="circle-icon">
-          <i data-lucide="circle-plus"></i>
-        </div>
-      `;
-      
       // Insert it right after the clicked box
       clickedBox.parentNode.insertBefore(newBox, clickedBox.nextSibling);
       
