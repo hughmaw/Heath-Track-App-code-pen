@@ -82,6 +82,10 @@ html {
   border-color: #B3DFFA;  /* Slightly darker border on hover */
 }
 
+.box:active {
+    transform: translateY(0);
+}
+
 .circle-icon {
     width: 100px;
     height: 100px;
