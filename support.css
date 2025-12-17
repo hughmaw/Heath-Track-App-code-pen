@@ -71,7 +71,8 @@ html {
   border: 4px dashed #272829;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;  /* Smooth hover effect */
-  display: flex;              
+  display: flex;             
+  flex-direction: column;
   align-items: center;        
   justify-content: center; 
   position: relative;
