@@ -1,4 +1,17 @@
 /* website is at: https://hughmaw.github.io/Heath-Track-App-code-pen/ --> settings --> pages --> top */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container{
+  display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
+  gap: 20px;  
+}
+
 body {
     background-color: #E0F4F4;
     margin: 0;
