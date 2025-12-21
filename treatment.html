@@ -18,6 +18,76 @@
         <h1 class="dashboard-title">Treatment</h1>
         <div style="width: 80px;"></div> <!-- Spacer for centering -->
     </div>
+    <main class="main">
+        <!-- Progress Card -->
+        <div class="card progress-card">
+            <div class="card-header">
+                <h2 class="card-title" id="overall-progress-title">Your current treatment is 92% complete overall!</h2>
+            </div>
+            <div class="card-content">
+                <div class="treatments-grid" id="treatments-list">
+                    <!-- Treatments will be rendered here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Treatment Button -->
+        <button class="add-button" id="add-treatment-btn">
+            <i data-lucide="plus"></i>
+            <span>Add treatment plan</span>
+        </button>
+
+        <!-- Add Treatment Form (hidden by default) -->
+        <div class="card form-card" id="treatment-form" style="display: none;">
+            <div class="card-header">
+                <h2 class="card-title">Add Treatment Plan</h2>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="label">Type of treatment</label>
+                    <input type="text" class="input" placeholder="Enter treatment type" id="treatment-type">
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Frequency</label>
+                    <input type="text" class="input" placeholder="e.g., Daily, Weekly" id="treatment-frequency">
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Length of treatment</label>
+                    <input type="text" class="input" placeholder="e.g., 30 days" id="treatment-length">
+                </div>
+
+                <div class="switch-row">
+                    <label class="label">Set reminders</label>
+                    <label class="switch">
+                        <input type="checkbox" id="reminders-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Doctor's Notes</label>
+                    <textarea class="textarea" placeholder="Add any notes from your doctor" rows="4" id="doctor-notes"></textarea>
+                </div>
+
+                <div class="switch-row">
+                    <label class="label">Caregiver Notification</label>
+                    <label class="switch">
+                        <input type="checkbox" id="caregiver-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-outline" id="cancel-btn">Cancel</button>
+                    <button class="btn btn-primary" id="save-btn">Save Treatment</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="treatment.js"></script>
     <script>
         lucide.createIcons();
     </script>
