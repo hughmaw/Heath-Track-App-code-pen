@@ -16,8 +16,100 @@
             </a>
         </div>
         <h1 class="dashboard-title">Event</h1>
-        <div style="width: 80px;"></div> <!-- Spacer for centering -->
+        <div style="width: 80px;"></div>
     </div>
+
+    <main class="main">
+        <!-- Body Diagram Section -->
+        <div class="card body-diagram-card">
+            <div class="body-diagram">
+                <svg class="body-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Left Person -->
+                    <g class="person left-person" data-side="left">
+                        <!-- Head -->
+                        <circle cx="50" cy="30" r="15" class="body-part head" data-part="head-left"/>
+                        <!-- Body -->
+                        <line x1="50" y1="45" x2="50" y2="100" class="body-part torso" data-part="torso-left"/>
+                        <!-- Arms -->
+                        <line x1="50" y1="55" x2="30" y2="80" class="body-part arm" data-part="arm-left-left"/>
+                        <line x1="50" y1="55" x2="70" y2="80" class="body-part arm" data-part="arm-right-left"/>
+                        <!-- Legs -->
+                        <line x1="50" y1="100" x2="40" y2="140" class="body-part leg" data-part="leg-left-left"/>
+                        <line x1="50" y1="100" x2="60" y2="140" class="body-part leg" data-part="leg-right-left"/>
+                    </g>
+                    
+                    <!-- Right Person -->
+                    <g class="person right-person" data-side="right">
+                        <!-- Head -->
+                        <circle cx="150" cy="30" r="15" class="body-part head" data-part="head-right"/>
+                        <!-- Body -->
+                        <line x1="150" y1="45" x2="150" y2="100" class="body-part torso" data-part="torso-right"/>
+                        <!-- Arms -->
+                        <line x1="150" y1="55" x2="130" y2="80" class="body-part arm" data-part="arm-left-right"/>
+                        <line x1="150" y1="55" x2="170" y2="80" class="body-part arm" data-part="arm-right-right"/>
+                        <!-- Legs -->
+                        <line x1="150" y1="100" x2="140" y2="140" class="body-part leg" data-part="leg-left-right"/>
+                        <line x1="150" y1="100" x2="160" y2="140" class="body-part leg" data-part="leg-right-right"/>
+                    </g>
+                </svg>
+            </div>
+            <button class="select-button" id="select-area-btn">
+                Select affected area
+            </button>
+        </div>
+
+        <!-- Discomfort Level Section -->
+        <div class="card">
+            <div class="card-content">
+                <div class="emoji-selector">
+                    <div class="emoji-option" data-level="1">😡</div>
+                    <div class="emoji-option" data-level="2">😠</div>
+                    <div class="emoji-option" data-level="3">😕</div>
+                    <div class="emoji-option" data-level="4">🙂</div>
+                    <div class="emoji-option" data-level="5">😊</div>
+                </div>
+                <input type="range" class="slider-input" id="discomfort-slider" min="1" max="5" value="3">
+            </div>
+            <button class="select-button" id="select-discomfort-btn">
+                Select level of discomfort
+            </button>
+        </div>
+
+        <!-- Type of Discomfort Section -->
+        <div class="card">
+            <div class="card-content">
+                <div class="discomfort-types">
+                    <div class="discomfort-emoji" data-type="nausea">🤢</div>
+                    <div class="discomfort-emoji" data-type="dizzy">😵</div>
+                    <div class="discomfort-emoji" data-type="pain">😣</div>
+                    <div class="discomfort-emoji" data-type="tired">😴</div>
+                    <div class="discomfort-emoji" data-type="sad">😢</div>
+                </div>
+            </div>
+            <button class="select-button" id="select-type-btn">
+                Type of discomfort
+            </button>
+        </div>
+
+        <!-- Voice Note Section -->
+        <div class="card voice-card">
+            <div class="voice-button" id="voice-btn">
+                <div class="microphone-icon">
+                    <i data-lucide="mic"></i>
+                </div>
+            </div>
+            <button class="select-button voice-note-btn" id="voice-note-btn">
+                Add a voice note
+            </button>
+        </div>
+
+        <!-- Save Button -->
+        <button class="btn btn-primary save-event-btn" id="save-event-btn">
+            Save Event
+        </button>
+    </main>
+
+    <script src="event.js"></script>
     <script>
         lucide.createIcons();
     </script>

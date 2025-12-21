@@ -1,30 +1,21 @@
 /* website is at: https://hughmaw.github.io/Heath-Track-App-code-pen/ --> settings --> pages --> top */
-.container{
-  display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
-  gap: 20px;  
-}
-
-body { 
-    background-color: #f5f7fa;
+body {
+    background-color: #E0F4F4;
     margin: 0;
     padding: 0;
     font-family: Helvetica, sans-serif;
 }
 
 html {
-    margin: 0;
+    margin: 0; 
     padding: 0;
 }
 
 .header-box {
     background-color: white;
-    border: 4px solid #E5F3FD;
-    border-top: none;
-    border-radius: 0 0 20px 20px; 
-    padding: 30px;
-    margin: 0 0 30px 0;  /* top right bottom left - cleaner than two margin lines */
+    border-bottom: 1px solid #e5e7eb;
+    padding: 20px 40px;
+    margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,25 +23,352 @@ html {
 
 .dashboard-title {
     font-family: Helvetica, sans-serif;
-    font-size: 36px;
+    font-size: 28px;
     color: black;
     font-weight: 600;
-    margin: 0;
-}
-
-.current-date {
-    font-family: Helvetica, sans-serif;
-    font-size: 18px;
-    color: #667589;
     margin: 0;
 }
 
 .back-button {
     font-size: 16px;
     cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.back-button a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .back-button svg {
     width: 20px;
     height: 20px;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+/* Main content */
+.main {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Card styles */
+.card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.card-content {
+    padding: 30px;
+}
+
+/* Body Diagram */
+.body-diagram-card {
+    padding: 30px;
+}
+
+.body-diagram {
+    background: #E0F4F4;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.body-svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+.body-part {
+    stroke: #4A90A4;
+    stroke-width: 3;
+    fill: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.body-part.head {
+    fill: #4A90A4;
+}
+
+.body-part:hover {
+    stroke: #6B5B95;
+    stroke-width: 4;
+}
+
+.body-part.selected {
+    stroke: #6B5B95;
+    stroke-width: 5;
+}
+
+.body-part.head.selected {
+    fill: #6B5B95;
+}
+
+/* Select Button */
+.select-button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #6B5B95, #8B7BA8);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: Helvetica, sans-serif;
+}
+
+.select-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(107, 91, 149, 0.3);
+}
+
+.select-button:active {
+    transform: translateY(0);
+}
+
+/* Emoji Selector */
+.emoji-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 8px;
+}
+
+.emoji-option {
+    font-size: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px;
+    border-radius: 12px;
+    user-select: none;
+}
+
+.emoji-option:hover {
+    transform: scale(1.1);
+    background: rgba(107, 91, 149, 0.1);
+}
+
+.emoji-option.selected {
+    transform: scale(1.2);
+    background: rgba(107, 91, 149, 0.2);
+}
+
+/* Slider */
+.slider-input {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #FF4444, #FF9944, #FFDD44, #99DD55, #44DD88);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.slider-input::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Discomfort Types */
+.discomfort-types {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.discomfort-emoji {
+    font-size: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 12px;
+    border-radius: 12px;
+    user-select: none;
+    flex: 1;
+    text-align: center;
+}
+
+.discomfort-emoji:hover {
+    transform: scale(1.1);
+    background: rgba(107, 91, 149, 0.1);
+}
+
+.discomfort-emoji.selected {
+    transform: scale(1.15);
+    background: rgba(107, 91, 149, 0.2);
+}
+
+.discomfort-emoji.checked::after {
+    content: '✓';
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #44DD88;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.discomfort-types {
+    position: relative;
+}
+
+.discomfort-emoji {
+    position: relative;
+}
+
+/* Voice Card */
+.voice-card {
+    padding: 30px;
+    text-align: center;
+}
+
+.voice-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF4444, #FF6666);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+}
+
+.voice-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 68, 68, 0.4);
+}
+
+.voice-button:active {
+    transform: scale(0.95);
+}
+
+.voice-button.recording {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(255, 68, 68, 0.6);
+    }
+}
+
+.microphone-icon {
+    color: white;
+}
+
+.microphone-icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.voice-note-btn {
+    margin-top: 0;
+}
+
+/* Save Button */
+.save-event-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #6B5B95, #8B7BA8);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    font-family: Helvetica, sans-serif;
+}
+
+.save-event-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(107, 91, 149, 0.3);
+}
+
+.save-event-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Success notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #44DD88;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+    font-weight: 500;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
 }
