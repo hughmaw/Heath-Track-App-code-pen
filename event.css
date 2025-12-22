@@ -156,6 +156,10 @@ html {
     transform: translateY(0);
 }
 
+.select-button.selected {
+    background: linear-gradient(135deg, #44DD88, #66EEAA);
+}
+
 /* Emoji Selector */
 .emoji-selector {
     display: flex;
@@ -212,6 +216,35 @@ html {
     cursor: pointer;
     border: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Dropdown for Discomfort Type */
+.discomfort-dropdown {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-family: Helvetica, sans-serif;
+    border: 2px solid #E5F3FD;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.discomfort-dropdown:hover {
+    border-color: #6B5B95;
+}
+
+.discomfort-dropdown:focus {
+    outline: none;
+    border-color: #6B5B95;
+    box-shadow: 0 0 0 3px rgba(107, 91, 149, 0.1);
+}
+
+.discomfort-dropdown option {
+    padding: 12px;
 }
 
 /* Discomfort Types */
@@ -319,6 +352,10 @@ html {
 
 .voice-note-btn {
     margin-top: 0;
+}
+
+.voice-note-btn.recording {
+    background: linear-gradient(135deg, #FF4444, #FF6666);
 }
 
 /* Save Button */
