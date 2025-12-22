@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calender</title>
+    <title>Calendar</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="calender.css">
 </head>
@@ -15,65 +15,83 @@
                 <span>Back</span>
             </a>
         </div>
-        <h1 class="dashboard-title">Calender</h1>
-        <div style="width: 80px;"></div> <!-- Spacer for centering -->
+        <h1 class="dashboard-title">Calendar</h1>
+        <div style="width: 80px;"></div>
     </div>
-        <main class="main container">
-      <div class="grid">
-        <!-- Calendar Card -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Select Date</h2>
-          </div>
-          <div class="card-content calendar-wrapper">
-            <!-- Calendar widget would go here -->
-            <div class="calendar">...</div>
-          </div>
-        </div>
-
-        <!-- Schedule Card -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Today's Schedule</h2>
-          </div>
-          <div class="card-content">
-            <div class="appointment">
-              <div class="appointment-header">
-                <div>
-                  <span class="badge">9:00 AM</span>
-                  <h3 class="appointment-title">Treatment: Arm Exercises</h3>
+    
+    <main class="main container">
+        <div class="grid">
+            <!-- Calendar Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Select Date</h2>
                 </div>
-                <button class="notify-button">
-                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                  </svg>
-                  Notify Caregiver
-                </button>
-              </div>
-              <p class="notes"><span class="notes-label">Doctor's Notes:</span> Lorem ipsum dolor sit amet...</p>
+                <div class="card-content calendar-wrapper">
+                    <div id="calendar-container"></div>
+                </div>
             </div>
 
-            <div class="appointment">
-              <div class="appointment-header">
-                <div>
-                  <span class="badge">2:00 PM</span>
-                  <h3 class="appointment-title">Treatment: Vitamins</h3>
+            <!-- Schedule Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 class="card-title">Schedule for <span id="selected-date-display">Today</span></h2>
+                        <button class="notify-button" id="add-appointment-btn" style="background-color: #4CAF50; color: white; padding: 8px 16px; border-radius: 6px;">
+                            <i data-lucide="plus"></i>
+                            Add Appointment
+                        </button>
+                    </div>
                 </div>
-                <button class="notify-button">
-                  <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                  </svg>
-                  Notify Caregiver
-                </button>
-              </div>
-              <p class="notes"><span class="notes-label">Doctor's Notes:</span> Lorem ipsum dolor sit amet...</p>
+                <div class="card-content" id="schedule-list">
+                    <p style="color: #999; text-align: center;">Select a date to view schedule</p>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+
+        <!-- Logged Events Card -->
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h2 class="card-title">Recent Health Events</h2>
+            </div>
+            <div class="card-content" id="events-list">
+                <p style="color: #999; text-align: center;">No events logged yet</p>
+            </div>
+        </div>
     </main>
+
+    <!-- Add Appointment Modal -->
+    <div id="appointment-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; border-radius: 12px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <h2 style="margin-bottom: 24px;">Add New Appointment</h2>
+            
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Date</label>
+                <input type="date" id="appt-date" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+            </div>
+            
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Time</label>
+                <input type="time" id="appt-time" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+            </div>
+            
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Title</label>
+                <input type="text" id="appt-title" placeholder="e.g., Physical Therapy" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Notes</label>
+                <textarea id="appt-notes" placeholder="Additional notes..." style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; min-height: 80px; resize: vertical;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 12px;">
+                <button id="save-appointment-btn" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Save Appointment</button>
+                <button id="cancel-appointment-btn" style="flex: 1; padding: 12px; background: #f0f0f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="calender.js"></script>
     <script>
         lucide.createIcons();
     </script>

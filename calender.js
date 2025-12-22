@@ -1,0 +1,312 @@
+// Calendar state
+let currentDate = new Date();
+let selectedDate = new Date();
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    renderCalendar();
+    loadScheduleForDate(selectedDate);
+    loadRecentEvents();
+    setupModal();
+});
+
+// Render calendar
+function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const prevLastDay = new Date(year, month, 0);
+    
+    const firstDayIndex = firstDay.getDay();
+    const lastDayDate = lastDay.getDate();
+    const prevLastDayDate = prevLastDay.getDate();
+    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    let calendarHTML = `
+        <div style="width: 100%; max-width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button id="prev-month" style="padding: 8px 12px; border: none; background: #f0f0f0; border-radius: 6px; cursor: pointer;">←</button>
+                <h3 style="margin: 0;">${monthNames[month]} ${year}</h3>
+                <button id="next-month" style="padding: 8px 12px; border: none; background: #f0f0f0; border-radius: 6px; cursor: pointer;">→</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
+                <div style="font-weight: bold; padding: 8px;">Sun</div>
+                <div style="font-weight: bold; padding: 8px;">Mon</div>
+                <div style="font-weight: bold; padding: 8px;">Tue</div>
+                <div style="font-weight: bold; padding: 8px;">Wed</div>
+                <div style="font-weight: bold; padding: 8px;">Thu</div>
+                <div style="font-weight: bold; padding: 8px;">Fri</div>
+                <div style="font-weight: bold; padding: 8px;">Sat</div>
+    `;
+    
+    // Previous month days
+    for (let i = firstDayIndex; i > 0; i--) {
+        calendarHTML += `<div style="padding: 8px; color: #ccc;">${prevLastDayDate - i + 1}</div>`;
+    }
+    
+    // Current month days
+    for (let day = 1; day <= lastDayDate; day++) {
+        const date = new Date(year, month, day);
+        const isToday = date.toDateString() === new Date().toDateString();
+        const isSelected = date.toDateString() === selectedDate.toDateString();
+        const hasEvent = checkIfDateHasEvent(date);
+        
+        let style = 'padding: 8px; cursor: pointer; border-radius: 6px; position: relative;';
+        if (isToday) style += ' background: #E5F3FD;';
+        if (isSelected) style += ' background: #4CAF50; color: white; font-weight: bold;';
+        
+        calendarHTML += `<div class="calendar-day" data-date="${date.toISOString()}" style="${style}">
+            ${day}
+            ${hasEvent ? '<div style="position: absolute; bottom: 2px; right: 2px; width: 6px; height: 6px; background: #f44336; border-radius: 50%;"></div>' : ''}
+        </div>`;
+    }
+    
+    calendarHTML += '</div></div>';
+    
+    document.getElementById('calendar-container').innerHTML = calendarHTML;
+    
+    // Add event listeners
+    document.getElementById('prev-month').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+    
+    document.getElementById('next-month').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+    
+    document.querySelectorAll('.calendar-day').forEach(day => {
+        day.addEventListener('click', function() {
+            selectedDate = new Date(this.getAttribute('data-date'));
+            renderCalendar();
+            loadScheduleForDate(selectedDate);
+        });
+    });
+}
+
+// Check if date has events or appointments
+function checkIfDateHasEvent(date) {
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    
+    const dateStr = date.toDateString();
+    
+    const hasAppointment = appointments.some(appt => {
+        return new Date(appt.date).toDateString() === dateStr;
+    });
+    
+    const hasEvent = events.some(event => {
+        return new Date(event.timestamp).toDateString() === dateStr;
+    });
+    
+    return hasAppointment || hasEvent;
+}
+
+// Load schedule for selected date
+function loadScheduleForDate(date) {
+    const dateStr = date.toDateString();
+    const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    document.getElementById('selected-date-display').textContent = displayDate;
+    
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    
+    const dayAppointments = appointments.filter(appt => {
+        return new Date(appt.date).toDateString() === dateStr;
+    }).sort((a, b) => a.time.localeCompare(b.time));
+    
+    const dayEvents = events.filter(event => {
+        return new Date(event.timestamp).toDateString() === dateStr;
+    });
+    
+    let scheduleHTML = '';
+    
+    if (dayAppointments.length === 0 && dayEvents.length === 0) {
+        scheduleHTML = '<p style="color: #999; text-align: center;">No appointments or events for this day</p>';
+    } else {
+        // Show appointments
+        dayAppointments.forEach(appt => {
+            scheduleHTML += `
+                <div class="appointment">
+                    <div class="appointment-header">
+                        <div>
+                            <span class="badge">${formatTime(appt.time)}</span>
+                            <h3 class="appointment-title">${appt.title}</h3>
+                        </div>
+                        <button class="notify-button delete-appt-btn" data-id="${appt.id}" style="color: #f44336;">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                    <p class="notes">${appt.notes || 'No notes'}</p>
+                </div>
+            `;
+        });
+        
+        // Show events
+        dayEvents.forEach(event => {
+            const time = new Date(event.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            scheduleHTML += `
+                <div class="appointment" style="border-left-color: #f44336;">
+                    <div class="appointment-header">
+                        <div>
+                            <span class="badge" style="background-color: #f44336;">${time}</span>
+                            <h3 class="appointment-title">Health Event: ${event.discomfortType}</h3>
+                        </div>
+                        <button class="notify-button delete-event-btn" data-id="${event.id}" style="color: #f44336;">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                    <p class="notes">
+                        <span class="notes-label">Area:</span> ${event.affectedArea}<br>
+                        <span class="notes-label">Level:</span> ${event.discomfortLevel}/5<br>
+                        ${event.voiceNote ? `<span class="notes-label">Note:</span> ${event.voiceNote}` : ''}
+                    </p>
+                </div>
+            `;
+        });
+    }
+    
+    document.getElementById('schedule-list').innerHTML = scheduleHTML;
+    lucide.createIcons();
+    
+    // Add delete event listeners
+    document.querySelectorAll('.delete-appt-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteAppointment(this.getAttribute('data-id'));
+        });
+    });
+    
+    document.querySelectorAll('.delete-event-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteEvent(this.getAttribute('data-id'));
+        });
+    });
+}
+
+// Load recent events
+function loadRecentEvents() {
+    const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    
+    if (events.length === 0) {
+        document.getElementById('events-list').innerHTML = '<p style="color: #999; text-align: center;">No events logged yet</p>';
+        return;
+    }
+    
+    const recentEvents = events.slice(-5).reverse();
+    let eventsHTML = '';
+    
+    recentEvents.forEach(event => {
+        const date = new Date(event.timestamp);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        
+        eventsHTML += `
+            <div class="appointment" style="border-left-color: #f44336;">
+                <div class="appointment-header">
+                    <div>
+                        <span class="badge" style="background-color: #f44336;">${dateStr} ${timeStr}</span>
+                        <h3 class="appointment-title">${event.discomfortType}</h3>
+                    </div>
+                </div>
+                <p class="notes">
+                    <span class="notes-label">Area:</span> ${event.affectedArea} | 
+                    <span class="notes-label">Level:</span> ${event.discomfortLevel}/5
+                    ${event.voiceNote ? `<br><span class="notes-label">Note:</span> ${event.voiceNote.substring(0, 100)}${event.voiceNote.length > 100 ? '...' : ''}` : ''}
+                </p>
+            </div>
+        `;
+    });
+    
+    document.getElementById('events-list').innerHTML = eventsHTML;
+}
+
+// Format time for display
+function formatTime(time) {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+}
+
+// Setup appointment modal
+function setupModal() {
+    const modal = document.getElementById('appointment-modal');
+    const addBtn = document.getElementById('add-appointment-btn');
+    const saveBtn = document.getElementById('save-appointment-btn');
+    const cancelBtn = document.getElementById('cancel-appointment-btn');
+    
+    // Set default date to selected date
+    addBtn.addEventListener('click', () => {
+        document.getElementById('appt-date').value = selectedDate.toISOString().split('T')[0];
+        modal.style.display = 'flex';
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        clearForm();
+    });
+    
+    saveBtn.addEventListener('click', () => {
+        const date = document.getElementById('appt-date').value;
+        const time = document.getElementById('appt-time').value;
+        const title = document.getElementById('appt-title').value;
+        const notes = document.getElementById('appt-notes').value;
+        
+        if (!date || !time || !title) {
+            alert('Please fill in date, time, and title');
+            return;
+        }
+        
+        const appointment = {
+            id: 'appt_' + Date.now(),
+            date: date,
+            time: time,
+            title: title,
+            notes: notes
+        };
+        
+        const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments.push(appointment);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+        
+        modal.style.display = 'none';
+        clearForm();
+        renderCalendar();
+        loadScheduleForDate(selectedDate);
+        alert('Appointment added successfully!');
+    });
+}
+
+function clearForm() {
+    document.getElementById('appt-date').value = '';
+    document.getElementById('appt-time').value = '';
+    document.getElementById('appt-title').value = '';
+    document.getElementById('appt-notes').value = '';
+}
+
+function deleteAppointment(id) {
+    if (confirm('Delete this appointment?')) {
+        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments = appointments.filter(appt => appt.id !== id);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+        renderCalendar();
+        loadScheduleForDate(selectedDate);
+    }
+}
+
+function deleteEvent(id) {
+    if (confirm('Delete this health event?')) {
+        let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+        events = events.filter(event => event.id !== id);
+        localStorage.setItem('healthEvents', JSON.stringify(events));
+        renderCalendar();
+        loadScheduleForDate(selectedDate);
+        loadRecentEvents();
+    }
+}

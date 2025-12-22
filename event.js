@@ -12,16 +12,9 @@ const selectAreaBtn = document.getElementById('select-area-btn');
 
 bodyParts.forEach(part => {
     part.addEventListener('click', function() {
-        // Remove previous selection
         bodyParts.forEach(p => p.classList.remove('selected'));
-        
-        // Add selection to clicked part
         this.classList.add('selected');
-        
-        // Store the affected area
         eventData.affectedArea = this.getAttribute('data-part');
-        
-        // Update button state
         selectAreaBtn.classList.add('selected');
         selectAreaBtn.textContent = 'Area selected ✓';
     });
@@ -54,7 +47,6 @@ emojiOptions.forEach(option => {
     });
 });
 
-// Initialize with default value
 updateEmojiSelection(3);
 
 selectDiscomfortBtn.addEventListener('click', function() {
@@ -78,14 +70,13 @@ discomfortTypeSelect.addEventListener('change', function() {
     }
 });
 
-// Voice note functionality with speech recognition
+// Voice note functionality
 const voiceBtn = document.getElementById('voice-btn');
 const voiceNoteBtn = document.getElementById('voice-note-btn');
 let isRecording = false;
 let recognition = null;
 let transcript = '';
 
-// Check if browser supports speech recognition
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
@@ -109,7 +100,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         
         transcript = finalTranscript || interimTranscript;
         
-        // Update button with live transcript preview
         if (transcript) {
             voiceNoteBtn.textContent = `Recording: "${transcript.substring(0, 30)}${transcript.length > 30 ? '...' : ''}"`;
         }
@@ -129,7 +119,6 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     
     recognition.onend = function() {
         if (isRecording) {
-            // Restart if still supposed to be recording
             recognition.start();
         }
     };
@@ -149,7 +138,6 @@ function startRecording() {
     
     try {
         recognition.start();
-        console.log('Started recording...');
     } catch (error) {
         console.error('Error starting recognition:', error);
     }
@@ -168,10 +156,8 @@ function stopRecording() {
         voiceNoteBtn.classList.add('selected');
         voiceNoteBtn.textContent = `Voice note: "${transcript.substring(0, 40)}${transcript.length > 40 ? '...' : ''}"`;
         eventData.voiceNote = transcript;
-        console.log('Stopped recording. Transcript:', transcript);
     } else {
         voiceNoteBtn.textContent = 'Add a voice note';
-        console.log('No transcript captured');
     }
 }
 
@@ -183,11 +169,10 @@ voiceBtn.addEventListener('click', function() {
     }
 });
 
-// Save event
+// Save event - MODIFIED TO SAVE TO LOCALSTORAGE
 const saveEventBtn = document.getElementById('save-event-btn');
 
 saveEventBtn.addEventListener('click', function() {
-    // Validate required fields
     if (!eventData.affectedArea) {
         alert('Please select an affected area');
         return;
@@ -198,11 +183,16 @@ saveEventBtn.addEventListener('click', function() {
         return;
     }
     
-    // Add timestamp
     const now = new Date();
     eventData.timestamp = now.toISOString();
+    eventData.id = 'event_' + now.getTime();
     
-    // Format the data for the text file
+    // Save to localStorage
+    let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    events.push(eventData);
+    localStorage.setItem('healthEvents', JSON.stringify(events));
+    
+    // Still create the text file
     const textContent = `HEALTH EVENT LOG
 ==========================================
 Date & Time: ${now.toLocaleString()}
@@ -225,7 +215,6 @@ Raw Data (JSON):
 ${JSON.stringify(eventData, null, 2)}
 `;
 
-    // Create a blob and download the file
     const blob = new Blob([textContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -236,21 +225,10 @@ ${JSON.stringify(eventData, null, 2)}
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    // Log to console as well
-    console.log('Saving event:', eventData);
-    console.log('Voice transcript:', eventData.voiceNote);
-    
-    // Show success message
-    const message = eventData.voiceNote ? 
-        'Event saved with voice note! File downloaded.' : 
-        'Event saved successfully! File downloaded.';
-    alert(message);
-    
-    // Optionally redirect back to index
-    // window.location.href = 'index.html';
+    alert('Event saved successfully! File downloaded and added to calendar.');
+    window.location.href = 'index.html';
 });
 
-// Helper function to get emoji for discomfort level
 function getDiscomfortEmoji(level) {
     const emojis = {
         1: '😡 (Very High Discomfort)',
@@ -262,7 +240,6 @@ function getDiscomfortEmoji(level) {
     return emojis[level] || '';
 }
 
-// Helper function to get label for discomfort type
 function getDiscomfortTypeLabel(type) {
     const select = document.getElementById('discomfort-type-select');
     const option = select.querySelector(`option[value="${type}"]`);
