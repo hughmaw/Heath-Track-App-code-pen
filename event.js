@@ -3,8 +3,25 @@ let eventData = {
     affectedArea: null,
     discomfortLevel: 3,
     discomfortType: '',
+    discomfortTypeLabel: '',
     voiceNote: null
 };
+
+// Initialize date and time fields with current values
+const eventDateInput = document.getElementById('event-date');
+const eventTimeInput = document.getElementById('event-time');
+
+function initializeDateTimeFields() {
+    const now = new Date();
+    // Set date (YYYY-MM-DD format)
+    eventDateInput.value = now.toISOString().split('T')[0];
+    // Set time (HH:MM format)
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    eventTimeInput.value = `${hours}:${minutes}`;
+}
+
+initializeDateTimeFields();
 
 // Body diagram interaction
 const bodyParts = document.querySelectorAll('.body-part');
@@ -61,10 +78,14 @@ const selectTypeBtn = document.getElementById('select-type-btn');
 discomfortTypeSelect.addEventListener('change', function() {
     if (this.value) {
         eventData.discomfortType = this.value;
+        // Save the readable label (with emoji) for display on calendar
+        const selectedOption = this.options[this.selectedIndex];
+        eventData.discomfortTypeLabel = selectedOption.textContent;
         selectTypeBtn.classList.add('selected');
         selectTypeBtn.textContent = 'Type selected ✓';
     } else {
         eventData.discomfortType = '';
+        eventData.discomfortTypeLabel = '';
         selectTypeBtn.classList.remove('selected');
         selectTypeBtn.textContent = 'Type of discomfort';
     }
@@ -177,16 +198,26 @@ saveEventBtn.addEventListener('click', function() {
         alert('Please select an affected area');
         return;
     }
-    
+
     if (!eventData.discomfortType) {
         alert('Please select a discomfort type');
         return;
     }
-    
-    const now = new Date();
-    eventData.timestamp = now.toISOString();
-    eventData.id = 'event_' + now.getTime();
-    
+
+    // Get user-selected date and time
+    const selectedDate = eventDateInput.value;
+    const selectedTime = eventTimeInput.value;
+
+    if (!selectedDate || !selectedTime) {
+        alert('Please select a date and time');
+        return;
+    }
+
+    // Create timestamp from user-selected date/time
+    const eventDateTime = new Date(`${selectedDate}T${selectedTime}`);
+    eventData.timestamp = eventDateTime.toISOString();
+    eventData.id = 'event_' + Date.now();
+
     // Save to localStorage
     let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
     events.push(eventData);
@@ -195,7 +226,7 @@ saveEventBtn.addEventListener('click', function() {
     // Still create the text file
     const textContent = `HEALTH EVENT LOG
 ==========================================
-Date & Time: ${now.toLocaleString()}
+Date & Time: ${eventDateTime.toLocaleString()}
 
 AFFECTED AREA:
 ${eventData.affectedArea}
@@ -204,8 +235,7 @@ DISCOMFORT LEVEL: ${eventData.discomfortLevel}/5
 ${getDiscomfortEmoji(eventData.discomfortLevel)}
 
 DISCOMFORT TYPE:
-${eventData.discomfortType}
-${getDiscomfortTypeLabel(eventData.discomfortType)}
+${eventData.discomfortTypeLabel || eventData.discomfortType}
 
 VOICE NOTE:
 ${eventData.voiceNote || 'No voice note recorded'}
@@ -219,7 +249,7 @@ ${JSON.stringify(eventData, null, 2)}
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `health-event-${now.toISOString().split('T')[0]}-${now.getTime()}.txt`;
+    a.download = `health-event-${selectedDate}-${Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

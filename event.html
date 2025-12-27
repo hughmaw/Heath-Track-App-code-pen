@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Treatment</title>
+    <title>Log Event</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="event.css">
 </head>
@@ -15,64 +15,182 @@
                 <span>Back</span>
             </a>
         </div>
-        <h1 class="dashboard-title">Treatment</h1>
-        <div style="width: 80px;"></div> <!-- Spacer for centering -->
+        <h1 class="dashboard-title">Log Event</h1>
+        <div style="width: 80px;"></div>
     </div>
+
     <main class="main">
-        <!-- Progress Card -->
-        <div class="card progress-card">
-            <div class="card-header">
-                <h2 class="card-title" id="overall-progress-title">Your current treatment is 92% complete overall!</h2>
-            </div>
-            <div class="card-content">
-                <div class="treatments-grid" id="treatments-list">
-                    <!-- Treatments will be rendered here by JavaScript -->
+        <!-- Date & Time Card -->
+        <div class="card card-content">
+            <h3 style="margin-bottom: 20px; color: #333;">When did this occur?</h3>
+            <div style="display: flex; gap: 12px;">
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #666;">Date</label>
+                    <input type="date" id="event-date" class="discomfort-dropdown" style="margin-bottom: 0;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 8px; font-size: 14px; color: #666;">Time</label>
+                    <input type="time" id="event-time" class="discomfort-dropdown" style="margin-bottom: 0;">
                 </div>
             </div>
         </div>
 
-        <!-- Add Treatment Button -->
-        <button class="add-button" id="add-treatment-btn">
-            <i data-lucide="plus"></i>
-            <span>Add treatment plan</span>
-        </button>
+        <!-- Body Diagram Card -->
+        <div class="card body-diagram-card">
+            <div class="body-diagram">
+                <svg class="body-svg" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Head -->
+                    <circle class="body-part head" data-part="head" cx="100" cy="40" r="30"/>
 
-        <!-- Add Treatment Form (hidden by default) -->
-        <div class="card form-card" id="treatment-form" style="display: none;">
-            <div class="card-header">
-                <h2 class="card-title">Add Treatment Plan</h2>
+                    <!-- Neck -->
+                    <line class="body-part" data-part="neck" x1="100" y1="70" x2="100" y2="90"/>
+
+                    <!-- Torso -->
+                    <path class="body-part" data-part="chest" d="M60 90 L140 90 L140 150 L60 150 Z"/>
+                    <path class="body-part" data-part="abdomen" d="M65 150 L135 150 L130 220 L70 220 Z"/>
+
+                    <!-- Left Arm -->
+                    <path class="body-part" data-part="left-shoulder" d="M60 90 L40 110 L50 115 L65 100"/>
+                    <line class="body-part" data-part="left-upper-arm" x1="40" y1="110" x2="30" y2="160"/>
+                    <line class="body-part" data-part="left-forearm" x1="30" y1="160" x2="25" y2="210"/>
+                    <circle class="body-part" data-part="left-hand" cx="25" cy="220" r="12"/>
+
+                    <!-- Right Arm -->
+                    <path class="body-part" data-part="right-shoulder" d="M140 90 L160 110 L150 115 L135 100"/>
+                    <line class="body-part" data-part="right-upper-arm" x1="160" y1="110" x2="170" y2="160"/>
+                    <line class="body-part" data-part="right-forearm" x1="170" y1="160" x2="175" y2="210"/>
+                    <circle class="body-part" data-part="right-hand" cx="175" cy="220" r="12"/>
+
+                    <!-- Left Leg -->
+                    <line class="body-part" data-part="left-thigh" x1="80" y1="220" x2="70" y2="290"/>
+                    <line class="body-part" data-part="left-calf" x1="70" y1="290" x2="65" y2="360"/>
+                    <ellipse class="body-part" data-part="left-foot" cx="60" cy="375" rx="15" ry="8"/>
+
+                    <!-- Right Leg -->
+                    <line class="body-part" data-part="right-thigh" x1="120" y1="220" x2="130" y2="290"/>
+                    <line class="body-part" data-part="right-calf" x1="130" y1="290" x2="135" y2="360"/>
+                    <ellipse class="body-part" data-part="right-foot" cx="140" cy="375" rx="15" ry="8"/>
+                </svg>
             </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <label class="label">Type of treatment</label>
-                    <input type="text" class="input" placeholder="Enter treatment type" id="treatment-type">
+            <button class="select-button" id="select-area-btn">Select affected area</button>
+        </div>
+
+        <!-- Discomfort Level Card -->
+        <div class="card card-content">
+            <h3 style="margin-bottom: 20px; color: #333;">Level of Discomfort</h3>
+            <div class="emoji-selector">
+                <span class="emoji-option" data-level="1">😡</span>
+                <span class="emoji-option" data-level="2">😠</span>
+                <span class="emoji-option" data-level="3">😕</span>
+                <span class="emoji-option" data-level="4">🙂</span>
+                <span class="emoji-option" data-level="5">😊</span>
+            </div>
+            <input type="range" class="slider-input" id="discomfort-slider" min="1" max="5" value="3">
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #666;">
+                <span>Very High</span>
+                <span>Minimal</span>
+            </div>
+            <button class="select-button" id="select-discomfort-btn" style="margin-top: 20px;">Select discomfort level</button>
+        </div>
+
+        <!-- Discomfort Type Card -->
+        <div class="card card-content">
+            <h3 style="margin-bottom: 20px; color: #333;">Type of Discomfort</h3>
+            <select class="discomfort-dropdown" id="discomfort-type-select">
+                <option value="">Select type of discomfort...</option>
+
+                <optgroup label="🔥 Pain">
+                    <option value="sharp-pain">🔪 Sharp Pain</option>
+                    <option value="dull-pain">😣 Dull Ache</option>
+                    <option value="throbbing-pain">💢 Throbbing Pain</option>
+                    <option value="burning-pain">🔥 Burning Sensation</option>
+                    <option value="stabbing-pain">⚡ Stabbing Pain</option>
+                    <option value="radiating-pain">〰️ Radiating Pain</option>
+                </optgroup>
+
+                <optgroup label="💪 Muscle &amp; Fatigue">
+                    <option value="muscle-soreness">💪 Muscle Soreness</option>
+                    <option value="muscle-fatigue">😫 Muscle Fatigue</option>
+                    <option value="stiffness">🦴 Stiffness</option>
+                    <option value="cramping">🔄 Cramping</option>
+                    <option value="weakness">😩 Weakness</option>
+                    <option value="tension">😤 Muscle Tension</option>
+                </optgroup>
+
+                <optgroup label="🤕 Head &amp; Neurological">
+                    <option value="headache">🤕 Headache</option>
+                    <option value="migraine">🌀 Migraine</option>
+                    <option value="dizziness">💫 Dizziness</option>
+                    <option value="tingling">🫨 Tingling / Numbness</option>
+                    <option value="pressure-head">🎈 Head Pressure</option>
+                </optgroup>
+
+                <optgroup label="🤢 Stomach &amp; Digestive">
+                    <option value="nausea">🤢 Nausea</option>
+                    <option value="stomach-ache">🤮 Stomach Ache</option>
+                    <option value="bloating">😖 Bloating</option>
+                    <option value="indigestion">🫃 Indigestion</option>
+                    <option value="cramps-stomach">😵‍💫 Stomach Cramps</option>
+                    <option value="acid-reflux">🌋 Acid Reflux</option>
+                </optgroup>
+
+                <optgroup label="🥵 Temperature">
+                    <option value="too-hot">🥵 Feeling Too Hot</option>
+                    <option value="too-cold">🥶 Feeling Too Cold</option>
+                    <option value="fever">🤒 Fever / Chills</option>
+                    <option value="sweating">💦 Excessive Sweating</option>
+                </optgroup>
+
+                <optgroup label="🦟 Skin &amp; Irritation">
+                    <option value="itching">🦟 Itching</option>
+                    <option value="rash">🔴 Rash / Redness</option>
+                    <option value="irritation">😾 Skin Irritation</option>
+                    <option value="swelling">🎈 Swelling</option>
+                    <option value="dryness">🏜️ Dry Skin</option>
+                </optgroup>
+
+                <optgroup label="🩸 Injury &amp; Trauma">
+                    <option value="bruising">🩸 Bruising</option>
+                    <option value="cut-wound">🩹 Cut / Wound</option>
+                    <option value="sprain">🦶 Sprain / Strain</option>
+                    <option value="impact-injury">💥 Impact Injury</option>
+                </optgroup>
+
+                <optgroup label="😮‍💨 Respiratory">
+                    <option value="shortness-breath">😮‍💨 Shortness of Breath</option>
+                    <option value="chest-tightness">😰 Chest Tightness</option>
+                    <option value="coughing">🤧 Coughing</option>
+                    <option value="congestion">🤧 Congestion</option>
+                </optgroup>
+
+                <optgroup label="😴 Other">
+                    <option value="fatigue-general">😴 General Fatigue</option>
+                    <option value="insomnia">🌙 Sleep Issues</option>
+                    <option value="anxiety">😰 Anxiety / Stress</option>
+                    <option value="other">❓ Other</option>
+                </optgroup>
+            </select>
+            <button class="select-button" id="select-type-btn">Type of discomfort</button>
+        </div>
+
+        <!-- Voice Note Card -->
+        <div class="card voice-card">
+            <h3 style="margin-bottom: 20px; color: #333;">Voice Note</h3>
+            <div class="voice-button" id="voice-btn">
+                <div class="microphone-icon">
+                    <i data-lucide="mic"></i>
                 </div>
+            </div>
+            <button class="select-button voice-note-btn" id="voice-note-btn">Add a voice note</button>
+        </div>
 
-                <div class="form-group">
-                    <label class="label">Frequency</label>
-                    <input type="text" class="input" placeholder="e.g., Daily, Weekly" id="treatment-frequency">
-                </div>
+        <!-- Save Button -->
+        <button class="save-event-btn" id="save-event-btn">Save Event</button>
+    </main>
 
-                <div class="form-group">
-                    <label class="label">Length of treatment</label>
-                    <input type="text" class="input" placeholder="e.g., 30 days" id="treatment-length">
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Progress (%)</label>
-                    <input type="number" class="input" placeholder="0-100" min="0" max="100" id="treatment-progress" value="0">
-                </div>
-
-                <div class="switch-row">
-                    <label class="label">Set reminders</label>
-                    <label class="switch">
-                        <input type="checkbox" id="reminders-toggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Doctor's Notes
-
-
-# ask claud for full file
+    <script src="event.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

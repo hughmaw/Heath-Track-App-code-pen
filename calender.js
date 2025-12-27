@@ -2,6 +2,27 @@
 let currentDate = new Date();
 let selectedDate = new Date();
 
+// Helper function to format body part names
+function formatBodyPart(part) {
+    if (!part) return 'Unknown';
+    return part
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
+// Helper function to get discomfort level with emoji
+function getDiscomfortLevelEmoji(level) {
+    const emojis = {
+        1: '😡 Very High (1/5)',
+        2: '😠 High (2/5)',
+        3: '😕 Moderate (3/5)',
+        4: '🙂 Low (4/5)',
+        5: '😊 Minimal (5/5)'
+    };
+    return emojis[level] || `${level}/5`;
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     renderCalendar();
@@ -150,20 +171,22 @@ function loadScheduleForDate(date) {
         // Show events
         dayEvents.forEach(event => {
             const time = new Date(event.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            const displayType = event.discomfortTypeLabel || event.discomfortType;
+            const areaFormatted = formatBodyPart(event.affectedArea);
             scheduleHTML += `
                 <div class="appointment" style="border-left-color: #f44336;">
                     <div class="appointment-header">
                         <div>
                             <span class="badge" style="background-color: #f44336;">${time}</span>
-                            <h3 class="appointment-title">Health Event: ${event.discomfortType}</h3>
+                            <h3 class="appointment-title">${displayType}</h3>
                         </div>
                         <button class="notify-button delete-event-btn" data-id="${event.id}" style="color: #f44336;">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </div>
                     <p class="notes">
-                        <span class="notes-label">Area:</span> ${event.affectedArea}<br>
-                        <span class="notes-label">Level:</span> ${event.discomfortLevel}/5<br>
+                        <span class="notes-label">Area:</span> ${areaFormatted}<br>
+                        <span class="notes-label">Level:</span> ${getDiscomfortLevelEmoji(event.discomfortLevel)}<br>
                         ${event.voiceNote ? `<span class="notes-label">Note:</span> ${event.voiceNote}` : ''}
                     </p>
                 </div>
@@ -204,18 +227,20 @@ function loadRecentEvents() {
         const date = new Date(event.timestamp);
         const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-        
+        const displayType = event.discomfortTypeLabel || event.discomfortType;
+        const areaFormatted = formatBodyPart(event.affectedArea);
+
         eventsHTML += `
             <div class="appointment" style="border-left-color: #f44336;">
                 <div class="appointment-header">
                     <div>
                         <span class="badge" style="background-color: #f44336;">${dateStr} ${timeStr}</span>
-                        <h3 class="appointment-title">${event.discomfortType}</h3>
+                        <h3 class="appointment-title">${displayType}</h3>
                     </div>
                 </div>
                 <p class="notes">
-                    <span class="notes-label">Area:</span> ${event.affectedArea} | 
-                    <span class="notes-label">Level:</span> ${event.discomfortLevel}/5
+                    <span class="notes-label">Area:</span> ${areaFormatted} |
+                    <span class="notes-label">Level:</span> ${getDiscomfortLevelEmoji(event.discomfortLevel)}
                     ${event.voiceNote ? `<br><span class="notes-label">Note:</span> ${event.voiceNote.substring(0, 100)}${event.voiceNote.length > 100 ? '...' : ''}` : ''}
                 </p>
             </div>
