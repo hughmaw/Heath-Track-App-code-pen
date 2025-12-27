@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Summary</title>
+    <title>Health Summary</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="summary.css">
 </head>
@@ -15,25 +15,152 @@
                 <span>Back</span>
             </a>
         </div>
-        <h1 class="dashboard-title">AI Summary</h1>
-        <div style="width: 80px;"></div> <!-- Spacer for centering -->
+        <h1 class="dashboard-title">Health Summary</h1>
+        <div style="width: 80px;"></div>
     </div>
-    
-    <div class="container">
-        <div class="box">
-            <h2 class="box-title">Generate Health Summary</h2>
-            
-            <div class="icon-circle">
-                <i data-lucide="sparkles"></i>
+
+    <main class="main-container">
+        <!-- Time Frame Selection -->
+        <div class="card" id="selection-card">
+            <h2 class="card-title">
+                <i data-lucide="calendar-range"></i>
+                Select Time Frame
+            </h2>
+
+            <div class="time-frame-options">
+                <button class="time-btn active" data-days="7">Last 7 Days</button>
+                <button class="time-btn" data-days="14">Last 14 Days</button>
+                <button class="time-btn" data-days="30">Last 30 Days</button>
+                <button class="time-btn" data-days="90">Last 3 Months</button>
+                <button class="time-btn" data-days="custom">Custom Range</button>
             </div>
-            
-            <h3 class="ready-text">Ready to create your summary?</h3>
-            <p class="description-text">Generate a comprehensive AI-powered summary of your health journey</p>
-            
-            <button class="generate-button">Press to get an AI summary</button>
+
+            <div class="custom-range" id="custom-range" style="display: none;">
+                <div class="date-inputs">
+                    <div class="date-field">
+                        <label>From</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="date-field">
+                        <label>To</label>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+            </div>
+
+            <button class="generate-button" id="generate-btn">
+                <i data-lucide="sparkles"></i>
+                Generate Summary
+            </button>
         </div>
-    </div>
-    
+
+        <!-- Summary Output (hidden initially) -->
+        <div class="card" id="summary-card" style="display: none;">
+            <div class="summary-header">
+                <h2 class="card-title">
+                    <i data-lucide="file-text"></i>
+                    Health Summary Report
+                </h2>
+                <div class="summary-actions">
+                    <button class="action-btn" id="download-btn">
+                        <i data-lucide="download"></i>
+                        Download PDF
+                    </button>
+                    <button class="action-btn secondary" id="new-summary-btn">
+                        <i data-lucide="refresh-cw"></i>
+                        New Summary
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Header -->
+            <div class="report-section report-header-section">
+                <div class="report-logo">
+                    <i data-lucide="heart-pulse"></i>
+                    <span>Heath Track</span>
+                </div>
+                <div class="report-meta">
+                    <p><strong>Patient Health Summary Report</strong></p>
+                    <p id="report-date-range"></p>
+                    <p id="report-generated-date"></p>
+                </div>
+            </div>
+
+            <!-- Overview Stats -->
+            <div class="report-section">
+                <h3 class="section-title">Overview</h3>
+                <div class="stats-grid" id="stats-overview">
+                    <!-- Stats will be injected here -->
+                </div>
+            </div>
+
+            <!-- Trend Analysis -->
+            <div class="report-section">
+                <h3 class="section-title">Trend Analysis</h3>
+                <div class="trends-container" id="trends-container">
+                    <!-- Trends will be injected here -->
+                </div>
+            </div>
+
+            <!-- Events by Category -->
+            <div class="report-section">
+                <h3 class="section-title">Events by Category</h3>
+                <div class="category-breakdown" id="category-breakdown">
+                    <!-- Category breakdown will be injected here -->
+                </div>
+            </div>
+
+            <!-- Body Areas Affected -->
+            <div class="report-section">
+                <h3 class="section-title">Affected Body Areas</h3>
+                <div class="body-areas-list" id="body-areas-list">
+                    <!-- Body areas will be injected here -->
+                </div>
+            </div>
+
+            <!-- Severity Distribution -->
+            <div class="report-section">
+                <h3 class="section-title">Discomfort Severity Distribution</h3>
+                <div class="severity-chart" id="severity-chart">
+                    <!-- Severity chart will be injected here -->
+                </div>
+            </div>
+
+            <!-- Detailed Event Log -->
+            <div class="report-section">
+                <h3 class="section-title">Detailed Event Log</h3>
+                <div class="event-log" id="event-log">
+                    <!-- Event log will be injected here -->
+                </div>
+            </div>
+
+            <!-- Clinical Notes -->
+            <div class="report-section clinical-notes">
+                <h3 class="section-title">Notes for Healthcare Provider</h3>
+                <div class="clinical-content" id="clinical-notes">
+                    <!-- Clinical notes will be injected here -->
+                </div>
+            </div>
+
+            <!-- Report Footer -->
+            <div class="report-footer">
+                <p>This report was generated by Heath Track App for informational purposes.</p>
+                <p>Please consult with a healthcare professional for medical advice.</p>
+            </div>
+        </div>
+
+        <!-- No Data Message -->
+        <div class="card" id="no-data-card" style="display: none;">
+            <div class="no-data-content">
+                <i data-lucide="inbox"></i>
+                <h3>No Events Found</h3>
+                <p>There are no health events logged for the selected time period.</p>
+                <a href="event.html" class="generate-button" style="display: inline-block; text-decoration: none;">Log an Event</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="summary.js"></script>
     <script>
         lucide.createIcons();
     </script>
