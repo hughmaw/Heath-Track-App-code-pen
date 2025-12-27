@@ -38,59 +38,59 @@
             <!-- Schedule Card -->
             <div class="card">
                 <div class="card-header">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="schedule-header">
                         <h2 class="card-title">Schedule for <span id="selected-date-display">Today</span></h2>
-                        <button class="notify-button" id="add-appointment-btn" style="background-color: #4CAF50; color: white; padding: 8px 16px; border-radius: 6px;">
+                        <button class="notify-button add-btn" id="add-appointment-btn">
                             <i data-lucide="plus"></i>
                             Add Appointment
                         </button>
                     </div>
                 </div>
                 <div class="card-content" id="schedule-list">
-                    <p style="color: #999; text-align: center;">Select a date to view schedule</p>
+                    <p class="empty-state">Select a date to view schedule</p>
                 </div>
             </div>
         </div>
 
         <!-- Logged Events Card -->
-        <div class="card" style="margin-top: 24px;">
+        <div class="card events-card">
             <div class="card-header">
                 <h2 class="card-title">Recent Health Events</h2>
             </div>
             <div class="card-content" id="events-list">
-                <p style="color: #999; text-align: center;">No events logged yet</p>
+                <p class="empty-state">No events logged yet</p>
             </div>
         </div>
     </main>
 
     <!-- Add Appointment Modal -->
-    <div id="appointment-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-        <div style="background: white; border-radius: 12px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <h2 style="margin-bottom: 24px;">Add New Appointment</h2>
-            
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Date</label>
-                <input type="date" id="appt-date" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+    <div id="appointment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Add New Appointment</h2>
+
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" id="appt-date" class="form-input">
             </div>
-            
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Time</label>
-                <input type="time" id="appt-time" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+
+            <div class="form-group">
+                <label class="form-label">Time</label>
+                <input type="time" id="appt-time" class="form-input">
             </div>
-            
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Title</label>
-                <input type="text" id="appt-title" placeholder="e.g., Physical Therapy" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px;">
+
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type="text" id="appt-title" placeholder="e.g., Physical Therapy" class="form-input">
             </div>
-            
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 500;">Notes</label>
-                <textarea id="appt-notes" placeholder="Additional notes..." style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; min-height: 80px; resize: vertical;"></textarea>
+
+            <div class="form-group">
+                <label class="form-label">Notes</label>
+                <textarea id="appt-notes" placeholder="Additional notes..." class="form-textarea"></textarea>
             </div>
-            
-            <div style="display: flex; gap: 12px;">
-                <button id="save-appointment-btn" style="flex: 1; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Save Appointment</button>
-                <button id="cancel-appointment-btn" style="flex: 1; padding: 12px; background: #f0f0f0; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Cancel</button>
+
+            <div class="modal-buttons">
+                <button id="save-appointment-btn" class="btn-save">Save Appointment</button>
+                <button id="cancel-appointment-btn" class="btn-cancel">Cancel</button>
             </div>
         </div>
     </div>

@@ -35,72 +35,72 @@ document.addEventListener('DOMContentLoaded', function() {
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const prevLastDay = new Date(year, month, 0);
-    
+
     const firstDayIndex = firstDay.getDay();
     const lastDayDate = lastDay.getDate();
     const prevLastDayDate = prevLastDay.getDate();
-    
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                         'July', 'August', 'September', 'October', 'November', 'December'];
-    
+
     let calendarHTML = `
-        <div style="width: 100%; max-width: 400px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <button id="prev-month" style="padding: 8px 12px; border: none; background: #f0f0f0; border-radius: 6px; cursor: pointer;">←</button>
-                <h3 style="margin: 0;">${monthNames[month]} ${year}</h3>
-                <button id="next-month" style="padding: 8px 12px; border: none; background: #f0f0f0; border-radius: 6px; cursor: pointer;">→</button>
+        <div class="calendar-container">
+            <div class="calendar-nav">
+                <button id="prev-month" class="cal-nav-btn">←</button>
+                <h3 class="calendar-month">${monthNames[month]} ${year}</h3>
+                <button id="next-month" class="cal-nav-btn">→</button>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
-                <div style="font-weight: bold; padding: 8px;">Sun</div>
-                <div style="font-weight: bold; padding: 8px;">Mon</div>
-                <div style="font-weight: bold; padding: 8px;">Tue</div>
-                <div style="font-weight: bold; padding: 8px;">Wed</div>
-                <div style="font-weight: bold; padding: 8px;">Thu</div>
-                <div style="font-weight: bold; padding: 8px;">Fri</div>
-                <div style="font-weight: bold; padding: 8px;">Sat</div>
+            <div class="calendar-grid">
+                <div class="calendar-header-day">Sun</div>
+                <div class="calendar-header-day">Mon</div>
+                <div class="calendar-header-day">Tue</div>
+                <div class="calendar-header-day">Wed</div>
+                <div class="calendar-header-day">Thu</div>
+                <div class="calendar-header-day">Fri</div>
+                <div class="calendar-header-day">Sat</div>
     `;
-    
+
     // Previous month days
     for (let i = firstDayIndex; i > 0; i--) {
-        calendarHTML += `<div style="padding: 8px; color: #ccc;">${prevLastDayDate - i + 1}</div>`;
+        calendarHTML += `<div class="calendar-day-inactive">${prevLastDayDate - i + 1}</div>`;
     }
-    
+
     // Current month days
     for (let day = 1; day <= lastDayDate; day++) {
         const date = new Date(year, month, day);
         const isToday = date.toDateString() === new Date().toDateString();
         const isSelected = date.toDateString() === selectedDate.toDateString();
         const hasEvent = checkIfDateHasEvent(date);
-        
-        let style = 'padding: 8px; cursor: pointer; border-radius: 6px; position: relative;';
-        if (isToday) style += ' background: #E5F3FD;';
-        if (isSelected) style += ' background: #4CAF50; color: white; font-weight: bold;';
-        
-        calendarHTML += `<div class="calendar-day" data-date="${date.toISOString()}" style="${style}">
+
+        let dayClass = 'calendar-day';
+        if (isToday) dayClass += ' calendar-day-today';
+        if (isSelected) dayClass += ' calendar-day-selected';
+
+        calendarHTML += `<div class="${dayClass}" data-date="${date.toISOString()}">
             ${day}
-            ${hasEvent ? '<div style="position: absolute; bottom: 2px; right: 2px; width: 6px; height: 6px; background: #f44336; border-radius: 50%;"></div>' : ''}
+            ${hasEvent ? '<div class="calendar-event-dot"></div>' : ''}
         </div>`;
     }
-    
+
     calendarHTML += '</div></div>';
-    
+
     document.getElementById('calendar-container').innerHTML = calendarHTML;
-    
+
     // Add event listeners
     document.getElementById('prev-month').addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar();
     });
-    
+
     document.getElementById('next-month').addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar();
     });
-    
+
     document.querySelectorAll('.calendar-day').forEach(day => {
         day.addEventListener('click', function() {
             selectedDate = new Date(this.getAttribute('data-date'));
@@ -114,17 +114,17 @@ function renderCalendar() {
 function checkIfDateHasEvent(date) {
     const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
     const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
-    
+
     const dateStr = date.toDateString();
-    
+
     const hasAppointment = appointments.some(appt => {
         return new Date(appt.date).toDateString() === dateStr;
     });
-    
+
     const hasEvent = events.some(event => {
         return new Date(event.timestamp).toDateString() === dateStr;
     });
-    
+
     return hasAppointment || hasEvent;
 }
 
@@ -133,22 +133,22 @@ function loadScheduleForDate(date) {
     const dateStr = date.toDateString();
     const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     document.getElementById('selected-date-display').textContent = displayDate;
-    
+
     const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
     const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
-    
+
     const dayAppointments = appointments.filter(appt => {
         return new Date(appt.date).toDateString() === dateStr;
     }).sort((a, b) => a.time.localeCompare(b.time));
-    
+
     const dayEvents = events.filter(event => {
         return new Date(event.timestamp).toDateString() === dateStr;
     });
-    
+
     let scheduleHTML = '';
-    
+
     if (dayAppointments.length === 0 && dayEvents.length === 0) {
-        scheduleHTML = '<p style="color: #999; text-align: center;">No appointments or events for this day</p>';
+        scheduleHTML = '<p class="empty-state">No appointments or events for this day</p>';
     } else {
         // Show appointments
         dayAppointments.forEach(appt => {
@@ -159,7 +159,7 @@ function loadScheduleForDate(date) {
                             <span class="badge">${formatTime(appt.time)}</span>
                             <h3 class="appointment-title">${appt.title}</h3>
                         </div>
-                        <button class="notify-button delete-appt-btn" data-id="${appt.id}" style="color: #f44336;">
+                        <button class="notify-button delete-btn delete-appt-btn" data-id="${appt.id}">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </div>
@@ -167,20 +167,20 @@ function loadScheduleForDate(date) {
                 </div>
             `;
         });
-        
+
         // Show events
         dayEvents.forEach(event => {
             const time = new Date(event.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
             const displayType = event.discomfortTypeLabel || event.discomfortType;
             const areaFormatted = formatBodyPart(event.affectedArea);
             scheduleHTML += `
-                <div class="appointment" style="border-left-color: #f44336;">
+                <div class="appointment event-item">
                     <div class="appointment-header">
                         <div>
-                            <span class="badge" style="background-color: #f44336;">${time}</span>
+                            <span class="badge event-badge">${time}</span>
                             <h3 class="appointment-title">${displayType}</h3>
                         </div>
-                        <button class="notify-button delete-event-btn" data-id="${event.id}" style="color: #f44336;">
+                        <button class="notify-button delete-btn delete-event-btn" data-id="${event.id}">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </div>
@@ -193,17 +193,17 @@ function loadScheduleForDate(date) {
             `;
         });
     }
-    
+
     document.getElementById('schedule-list').innerHTML = scheduleHTML;
     lucide.createIcons();
-    
+
     // Add delete event listeners
     document.querySelectorAll('.delete-appt-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             deleteAppointment(this.getAttribute('data-id'));
         });
     });
-    
+
     document.querySelectorAll('.delete-event-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             deleteEvent(this.getAttribute('data-id'));
@@ -214,15 +214,15 @@ function loadScheduleForDate(date) {
 // Load recent events
 function loadRecentEvents() {
     const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
-    
+
     if (events.length === 0) {
-        document.getElementById('events-list').innerHTML = '<p style="color: #999; text-align: center;">No events logged yet</p>';
+        document.getElementById('events-list').innerHTML = '<p class="empty-state">No events logged yet</p>';
         return;
     }
-    
+
     const recentEvents = events.slice(-5).reverse();
     let eventsHTML = '';
-    
+
     recentEvents.forEach(event => {
         const date = new Date(event.timestamp);
         const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -231,10 +231,10 @@ function loadRecentEvents() {
         const areaFormatted = formatBodyPart(event.affectedArea);
 
         eventsHTML += `
-            <div class="appointment" style="border-left-color: #f44336;">
+            <div class="appointment event-item">
                 <div class="appointment-header">
                     <div>
-                        <span class="badge" style="background-color: #f44336;">${dateStr} ${timeStr}</span>
+                        <span class="badge event-badge">${dateStr} ${timeStr}</span>
                         <h3 class="appointment-title">${displayType}</h3>
                     </div>
                 </div>
@@ -246,7 +246,7 @@ function loadRecentEvents() {
             </div>
         `;
     });
-    
+
     document.getElementById('events-list').innerHTML = eventsHTML;
 }
 
@@ -265,29 +265,29 @@ function setupModal() {
     const addBtn = document.getElementById('add-appointment-btn');
     const saveBtn = document.getElementById('save-appointment-btn');
     const cancelBtn = document.getElementById('cancel-appointment-btn');
-    
+
     // Set default date to selected date
     addBtn.addEventListener('click', () => {
         document.getElementById('appt-date').value = selectedDate.toISOString().split('T')[0];
         modal.style.display = 'flex';
     });
-    
+
     cancelBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         clearForm();
     });
-    
+
     saveBtn.addEventListener('click', () => {
         const date = document.getElementById('appt-date').value;
         const time = document.getElementById('appt-time').value;
         const title = document.getElementById('appt-title').value;
         const notes = document.getElementById('appt-notes').value;
-        
+
         if (!date || !time || !title) {
             alert('Please fill in date, time, and title');
             return;
         }
-        
+
         const appointment = {
             id: 'appt_' + Date.now(),
             date: date,
@@ -295,11 +295,11 @@ function setupModal() {
             title: title,
             notes: notes
         };
-        
+
         const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
         appointments.push(appointment);
         localStorage.setItem('appointments', JSON.stringify(appointments));
-        
+
         modal.style.display = 'none';
         clearForm();
         renderCalendar();

@@ -212,3 +212,248 @@ html {
 [data-theme="dark"] .calendar-day:hover {
     background-color: var(--bg-hover) !important;
 }
+
+/* Modal styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transition: background-color 0.3s ease;
+}
+
+.modal-title {
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid var(--border-primary);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 14px;
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-save {
+    flex: 1;
+    padding: 12px;
+    background: var(--color-success);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.btn-save:hover {
+    opacity: 0.9;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background: var(--bg-hover);
+}
+
+/* Add button styling */
+.add-btn {
+    background-color: var(--color-success);
+    color: var(--text-inverse);
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+/* Empty state text */
+.empty-state {
+    color: var(--text-tertiary);
+    text-align: center;
+}
+
+/* Schedule header */
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Events card spacing */
+.events-card {
+    margin-top: 24px;
+}
+
+/* Calendar component styles */
+.calendar-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cal-nav-btn {
+    padding: 8px 12px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.cal-nav-btn:hover {
+    background: var(--bg-hover);
+}
+
+.calendar-month {
+    margin: 0;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+}
+
+.calendar-header-day {
+    font-weight: bold;
+    padding: 8px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.calendar-day-inactive {
+    padding: 8px;
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
+}
+
+.calendar-day {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    position: relative;
+    color: var(--text-primary);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.calendar-day:hover {
+    background-color: var(--bg-hover);
+}
+
+.calendar-day-today {
+    background: var(--bg-tertiary);
+}
+
+.calendar-day-selected {
+    background: var(--color-success) !important;
+    color: var(--text-inverse) !important;
+    font-weight: bold;
+}
+
+.calendar-event-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    background: var(--color-danger);
+    border-radius: 50%;
+}
+
+/* Event item styles */
+.event-item {
+    border-left-color: var(--color-danger) !important;
+}
+
+.event-badge {
+    background-color: var(--color-danger) !important;
+}
+
+/* Delete button */
+.delete-btn {
+    color: var(--color-danger) !important;
+}
