@@ -1,0 +1,129 @@
+/* Theme Variables - Light Mode (Default) */
+:root {
+    /* Background colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f7fa;
+    --bg-tertiary: #f9fafb;
+    --bg-card: #ffffff;
+    --bg-hover: #f3f4f6;
+
+    /* Text colors */
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --text-inverse: #ffffff;
+
+    /* Border colors */
+    --border-primary: #e5e7eb;
+    --border-secondary: #E5F3FD;
+    --border-light: #f3f4f6;
+
+    /* Accent colors */
+    --accent-primary: #22c7a0;
+    --accent-primary-dark: #1fa89e;
+    --accent-gradient: linear-gradient(135deg, #22c7a0, #1fa89e);
+
+    /* Status colors */
+    --color-success: #22c55e;
+    --color-warning: #eab308;
+    --color-danger: #ef4444;
+    --color-info: #3b82f6;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+    /* Special backgrounds */
+    --bg-clinical: linear-gradient(135deg, #fefce8, #fef9c3);
+    --text-clinical: #713f12;
+    --border-clinical: rgba(202, 138, 4, 0.2);
+
+    /* Header specific */
+    --header-bg: #ffffff;
+    --header-border: #E5F3FD;
+}
+
+/* Theme Variables - Dark Mode */
+[data-theme="dark"] {
+    /* Background colors */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: #1e293b;
+    --bg-hover: #334155;
+
+    /* Text colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
+    --text-inverse: #0f172a;
+
+    /* Border colors */
+    --border-primary: #334155;
+    --border-secondary: #475569;
+    --border-light: #1e293b;
+
+    /* Accent colors - keep vibrant */
+    --accent-primary: #2dd4bf;
+    --accent-primary-dark: #14b8a6;
+    --accent-gradient: linear-gradient(135deg, #2dd4bf, #14b8a6);
+
+    /* Status colors - slightly brighter for dark mode */
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
+    --color-info: #60a5fa;
+
+    /* Shadow - more subtle in dark mode */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+    /* Special backgrounds */
+    --bg-clinical: linear-gradient(135deg, #422006, #451a03);
+    --text-clinical: #fef3c7;
+    --border-clinical: rgba(251, 191, 36, 0.3);
+
+    /* Header specific */
+    --header-bg: #1e293b;
+    --header-border: #334155;
+}
+
+/* Smooth transition for theme changes */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-primary);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: rotate(15deg);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+}

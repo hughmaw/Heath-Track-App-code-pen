@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Dashboard</title>
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="dashboard.css">
+    <script src="theme.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="header-box">
     <h1 class="dashboard-title">Health Track Dashboard</h1>
-    <p class="current-date" id="current-date"></p>
+    <div class="header-right">
+      <p class="current-date" id="current-date"></p>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+        <i data-lucide="moon"></i>
+      </button>
+    </div>
   </div>
   <div class="container">
     <a href="treatment.html" style="text-decoration: none; color: inherit;">
@@ -53,7 +60,7 @@
       </div>
     </a>
     <a href="summary.html" style="text-decoration: none; color: inherit;">
-      <div class="box">     
+      <div class="box">
         <div class="inner-box blue">
           <i data-lucide="file-text"></i>
         </div>
@@ -79,10 +86,10 @@
       </div>
     </a>
   </div>
-  
+
   <script>
     lucide.createIcons();
-    
+
     // Display current date
     const dateElement = document.getElementById('current-date');
     const today = new Date();

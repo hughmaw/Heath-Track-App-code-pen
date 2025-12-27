@@ -1,15 +1,17 @@
 /* website is at: https://hughmaw.github.io/Heath-Track-App-code-pen/ --> settings --> pages --> top */
-.container{
+.container {
   display: flex;
   justify-content: left;
   flex-wrap: wrap;
-  gap: 20px;  
+  gap: 20px;
+  padding: 0 30px;
 }
 
-body { 
-    background-color: #f5f7fa;
+body {
+    background-color: var(--bg-secondary);
     margin: 0;
     padding: 0;
+    font-family: Helvetica, sans-serif;
 }
 
 html {
@@ -18,95 +20,113 @@ html {
 }
 
 .header-box {
-    background-color: white;
-    border: 4px solid #E5F3FD;
+    background-color: var(--header-bg);
+    border: 4px solid var(--header-border);
     border-top: none;
-    border-radius: 0 0 20px 20px; 
+    border-radius: 0 0 20px 20px;
     padding: 30px;
-    margin: 0 0 30px 0;  /* top right bottom left - cleaner than two margin lines */
+    margin: 0 0 30px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .dashboard-title {
     font-family: Helvetica, sans-serif;
     font-size: 36px;
-    color: black;
+    color: var(--text-primary);
     font-weight: 600;
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .current-date {
     font-family: Helvetica, sans-serif;
     font-size: 18px;
-    color: #667589;
+    color: var(--text-secondary);
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .box {
-  width: 480px;        /* box width */
-  height: 240px;       /* box height */
-  background-color: white;  /* box color */
-  border-radius: 20px; /* ROUND CORNERS */
-  border: 4px solid #E5F3FD;
+  width: 480px;
+  height: 240px;
+  background-color: var(--bg-card);
+  border-radius: 20px;
+  border: 4px solid var(--border-secondary);
   position: sticky;
-  cursor: pointer; /* react when cursor is on it */
-  
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease, border-color 0.3s ease;
 }
-.box:hover{
+
+.box:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(38, 198, 184, 0.3);
 }
-.box:active{
+
+.box:active {
   transform: translateY(0);
 }
 
 .text-title {
   font-family: Helvetica, sans-serif;
   font-size: 30px;
-  color: black;
+  color: var(--text-primary);
   font-weight: 550;
   text-align: left;
   text-indent: 30px;
+  transition: color 0.3s ease;
 }
 
 .text-description {
   font-family: Helvetica, sans-serif;
   font-size: 15px;
-  color: #667589;
-  font-weight: 5000;
+  color: var(--text-secondary);
+  font-weight: 500;
   text-align: left;
   line-height: 1.6;
   padding-left: 30px;
   max-width: 80%;
   margin-top: -20px;
+  transition: color 0.3s ease;
 }
 
 .inner-box {
-  width: 70px;        
-  height: 70px;       
-  background-color: #000000;  
+  width: 70px;
+  height: 70px;
+  background-color: #000000;
   border-radius: 10px;
   margin: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .red {
-  background-color: #E57373; /* Light Red */
+  background-color: #E57373;
 }
+
 .blue {
-  background-color: #88AABF; /* Light Blue */
+  background-color: #88AABF;
 }
+
 .green {
-  background-color: #4CAF50; /* Light Green */
+  background-color: #4CAF50;
 }
+
 .yello {
-  background-color: #FFEE8C; /* Light Yello */
+  background-color: #FFEE8C;
 }
+
 .pink {
-  background-color: #FBD2D2; /* Light Pink */
+  background-color: #FBD2D2;
 }
 
 .inner-box svg {
@@ -115,3 +135,29 @@ html {
     color: white;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+    .header-box {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .header-right {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dashboard-title {
+        font-size: 28px;
+    }
+
+    .box {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .container {
+        justify-content: center;
+    }
+}

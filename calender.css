@@ -5,15 +5,15 @@
   box-sizing: border-box;
 }
 
-.container{
+.container {
   display: flex;
   justify-content: left;
   flex-wrap: wrap;
-  gap: 20px;  
+  gap: 20px;
 }
 
-body { 
-    background-color: #f5f7fa;
+body {
+    background-color: var(--bg-secondary);
     margin: 0;
     padding: 0;
     font-family: Helvetica, sans-serif;
@@ -25,35 +25,50 @@ html {
 }
 
 .header-box {
-    background-color: white;
-    border: 4px solid #E5F3FD;
+    background-color: var(--header-bg);
+    border: 4px solid var(--header-border);
     border-top: none;
-    border-radius: 0 0 20px 20px; 
+    border-radius: 0 0 20px 20px;
     padding: 30px;
-    margin: 0 0 30px 0;  /* top right bottom left - cleaner than two margin lines */
+    margin: 0 0 30px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .dashboard-title {
     font-family: Helvetica, sans-serif;
     font-size: 36px;
-    color: black;
+    color: var(--text-primary);
     font-weight: 600;
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .current-date {
     font-family: Helvetica, sans-serif;
     font-size: 18px;
-    color: #667589;
+    color: var(--text-secondary);
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .back-button {
     font-size: 16px;
     cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.back-button a {
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
 }
 
 .back-button svg {
@@ -61,9 +76,14 @@ html {
     height: 20px;
 }
 
+.back-button:hover {
+    background-color: var(--bg-hover);
+}
+
 .title {
   font-size: 2.25rem;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .main {
@@ -83,10 +103,11 @@ html {
 }
 
 .card {
-  background-color: hsl(0 0% 100%);
-  border: 1px solid hsl(240 5.9% 90%);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-header {
@@ -96,6 +117,8 @@ html {
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .card-content {
@@ -108,9 +131,12 @@ html {
 }
 
 .appointment {
-  border-left: 4px solid hsl(142.1 76.2% 36.3%);
+  border-left: 4px solid var(--color-success);
   padding: 12px 0 12px 16px;
   margin-bottom: 16px;
+  background-color: var(--bg-tertiary);
+  border-radius: 0 8px 8px 0;
+  transition: background-color 0.3s ease;
 }
 
 .appointment-header {
@@ -122,8 +148,8 @@ html {
 
 .badge {
   display: inline-block;
-  background-color: hsl(142.1 76.2% 36.3%);
-  color: white;
+  background-color: var(--color-success);
+  color: var(--text-inverse);
   padding: 4px 10px;
   border-radius: 9999px;
   font-size: 0.75rem;
@@ -134,6 +160,8 @@ html {
 .appointment-title {
   font-size: 1.125rem;
   font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .notify-button {
@@ -146,20 +174,24 @@ html {
   padding: 8px;
   border-radius: 6px;
   font-size: 0.875rem;
+  color: var(--text-secondary);
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .notify-button:hover {
-  background-color: hsl(240 4.8% 95.9%);
+  background-color: var(--bg-hover);
 }
 
 .notes {
   font-size: 0.875rem;
-  color: hsl(240 3.8% 46.1%);
+  color: var(--text-secondary);
   margin-top: 8px;
+  transition: color 0.3s ease;
 }
 
 .notes-label {
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 .icon {
@@ -170,4 +202,13 @@ html {
 .icon-sm {
   width: 16px;
   height: 16px;
+}
+
+/* Calendar day styling for dark mode */
+[data-theme="dark"] .calendar-day {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .calendar-day:hover {
+    background-color: var(--bg-hover) !important;
 }
