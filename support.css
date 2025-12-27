@@ -146,9 +146,110 @@ html {
 }
 
 .contact-info {
-  padding: 0 20px 20px 20px;
+  padding: 0 20px 15px 20px;
   text-align: center;
   font-size: 14px;
   line-height: 1.6;
   color: #333;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Contact box specific styles */
+.contact-box {
+  border-style: solid;
+  border-color: #E5F3FD;
+}
+
+.contact-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.contact-detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.detail-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Relationship badge */
+.relationship-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #22c7a0, #1fa89e);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Contact action buttons */
+.contact-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: auto;
+  padding-bottom: 15px;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.call-btn {
+  background: #22c55e;
+  color: white;
+}
+
+.call-btn:hover {
+  background: #16a34a;
+  transform: scale(1.1);
+}
+
+.email-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.email-btn:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+}
+
+/* Back button hover state */
+.back-button {
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #f3f4f6;
 }
