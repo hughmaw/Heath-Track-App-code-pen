@@ -14,6 +14,23 @@ function formatBodyPart(part) {
         .join(' ');
 }
 
+// Format multiple affected areas
+function formatAffectedAreas(event) {
+    // Handle new multi-area format
+    if (event.affectedAreas && Array.isArray(event.affectedAreas) && event.affectedAreas.length > 0) {
+        const uniqueRegions = [...new Set(event.affectedAreas.map(a => a.region))];
+        if (uniqueRegions.length === 1) {
+            return formatBodyPart(uniqueRegions[0]);
+        } else if (uniqueRegions.length <= 3) {
+            return uniqueRegions.map(r => formatBodyPart(r)).join(', ');
+        } else {
+            return `${uniqueRegions.slice(0, 2).map(r => formatBodyPart(r)).join(', ')} +${uniqueRegions.length - 2} more`;
+        }
+    }
+    // Fall back to old single-area format
+    return formatBodyPart(event.affectedArea);
+}
+
 // Helper function to get discomfort level with emoji
 function getDiscomfortLevelEmoji(level) {
     const emojis = {
@@ -191,7 +208,7 @@ function loadScheduleForDate(date) {
         dayEvents.forEach(event => {
             const time = new Date(event.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
             const displayType = event.discomfortTypeLabel || event.discomfortType;
-            const areaFormatted = formatBodyPart(event.affectedArea);
+            const areaFormatted = formatAffectedAreas(event);
             scheduleHTML += `
                 <div class="appointment event-item">
                     <div class="appointment-header">
@@ -259,7 +276,7 @@ function loadRecentEvents() {
         const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
         const displayType = event.discomfortTypeLabel || event.discomfortType;
-        const areaFormatted = formatBodyPart(event.affectedArea);
+        const areaFormatted = formatAffectedAreas(event);
 
         eventsHTML += `
             <div class="appointment event-item">

@@ -106,51 +106,242 @@ html {
     padding: 30px;
 }
 
+/* Card Section Titles */
+.card-section-title {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+/* Date Time Row */
+.date-time-row {
+    display: flex;
+    gap: 12px;
+}
+
+.date-time-field {
+    flex: 1;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+/* Slider Labels */
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
 /* Body Diagram */
 .body-diagram-card {
     padding: 30px;
+}
+
+.body-diagram-title {
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+/* View Toggle Tabs */
+.body-view-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.body-tab {
+    padding: 10px 32px;
+    border: 2px solid var(--border-primary);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: Helvetica, sans-serif;
+}
+
+.body-tab:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.body-tab:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.body-tab.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: var(--text-inverse);
+}
+
+.body-tab:hover:not(.active) {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* Body Diagram Container */
+.body-diagram-container {
+    position: relative;
 }
 
 .body-diagram {
     background: var(--bg-tertiary);
     border-radius: 12px;
     padding: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: center;
+    position: relative;
+    cursor: crosshair;
     transition: background-color 0.3s ease;
+}
+
+.body-diagram.hidden {
+    display: none;
 }
 
 .body-svg {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
     height: auto;
+    pointer-events: none;
 }
 
-.body-part {
+.body-outline {
     stroke: var(--accent-primary);
-    stroke-width: 3;
-    fill: none;
-    cursor: pointer;
+    stroke-width: 2;
+    fill: rgba(34, 199, 160, 0.1);
     transition: all 0.2s;
 }
 
-.body-part.head {
-    fill: var(--accent-primary);
+.body-spine {
+    stroke: var(--accent-primary);
+    stroke-width: 1.5;
+    opacity: 0.5;
 }
 
-.body-part:hover {
-    stroke: var(--accent-secondary);
-    stroke-width: 4;
+.view-label {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    letter-spacing: 1px;
 }
 
-.body-part.selected {
-    stroke: var(--accent-secondary);
-    stroke-width: 5;
+/* Dots Container */
+.dots-container {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    bottom: 30px;
+    pointer-events: none;
 }
 
-.body-part.head.selected {
-    fill: var(--accent-secondary);
+/* Red Dot Marker */
+.pain-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ff4444 0%, #cc0000 100%);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.4);
+    cursor: pointer;
+    pointer-events: auto;
+    animation: dotAppear 0.2s ease-out;
+    z-index: 10;
+}
+
+.pain-dot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 3px 12px rgba(255, 0, 0, 0.6);
+}
+
+.pain-dot::after {
+    content: '×';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.pain-dot:hover::after {
+    opacity: 1;
+}
+
+@keyframes dotAppear {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Selected Areas Display */
+.selected-areas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.selected-areas-label {
+    color: var(--text-secondary);
+}
+
+.selected-areas-count {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* Clear Button */
+.clear-dots-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+    font-family: Helvetica, sans-serif;
+}
+
+.clear-dots-btn:hover {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
 }
 
 /* Select Button */

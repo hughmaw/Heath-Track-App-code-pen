@@ -1,11 +1,19 @@
 // Event data storage
 let eventData = {
-    affectedArea: null,
+    affectedAreas: [], // Changed to array for multiple areas
     discomfortLevel: 3,
     discomfortType: '',
     discomfortTypeLabel: '',
     voiceNote: null
 };
+
+// Store placed dots
+let placedDots = {
+    front: [],
+    back: []
+};
+
+let dotIdCounter = 0;
 
 // Initialize date and time fields with current values
 const eventDateInput = document.getElementById('event-date');
@@ -23,18 +31,181 @@ function initializeDateTimeFields() {
 
 initializeDateTimeFields();
 
-// Body diagram interaction
-const bodyParts = document.querySelectorAll('.body-part');
-const selectAreaBtn = document.getElementById('select-area-btn');
+// Body diagram tab switching
+const bodyTabs = document.querySelectorAll('.body-tab');
+const bodyFront = document.getElementById('body-front');
+const bodyBack = document.getElementById('body-back');
 
-bodyParts.forEach(part => {
-    part.addEventListener('click', function() {
-        bodyParts.forEach(p => p.classList.remove('selected'));
-        this.classList.add('selected');
-        eventData.affectedArea = this.getAttribute('data-part');
-        selectAreaBtn.classList.add('selected');
-        selectAreaBtn.textContent = 'Area selected ✓';
+bodyTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        const view = this.getAttribute('data-view');
+
+        // Update tab styles
+        bodyTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+
+        // Show/hide body views
+        if (view === 'front') {
+            bodyFront.classList.remove('hidden');
+            bodyBack.classList.add('hidden');
+        } else {
+            bodyFront.classList.add('hidden');
+            bodyBack.classList.remove('hidden');
+        }
     });
+});
+
+// Click to place dots on body diagram
+const bodyDiagrams = document.querySelectorAll('.body-diagram');
+const selectAreaBtn = document.getElementById('select-area-btn');
+const areasCountDisplay = document.getElementById('areas-count');
+const clearDotsBtn = document.getElementById('clear-dots-btn');
+
+bodyDiagrams.forEach(diagram => {
+    diagram.addEventListener('click', function(e) {
+        // Don't place dot if clicking on existing dot
+        if (e.target.classList.contains('pain-dot')) return;
+
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Calculate percentage position for responsive positioning
+        const xPercent = (x / rect.width) * 100;
+        const yPercent = (y / rect.height) * 100;
+
+        const view = this.getAttribute('data-view');
+        const dotsContainer = document.getElementById(`dots-${view}`);
+
+        // Create dot element
+        const dot = document.createElement('div');
+        dot.className = 'pain-dot';
+        dot.style.left = `${xPercent}%`;
+        dot.style.top = `${yPercent}%`;
+        dot.setAttribute('data-dot-id', dotIdCounter);
+
+        // Store dot data
+        const dotData = {
+            id: dotIdCounter,
+            x: xPercent,
+            y: yPercent,
+            view: view,
+            bodyRegion: getBodyRegion(xPercent, yPercent, view)
+        };
+        placedDots[view].push(dotData);
+        dotIdCounter++;
+
+        // Click on dot to remove it
+        dot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dotId = parseInt(this.getAttribute('data-dot-id'));
+            removeDot(dotId, view);
+            this.remove();
+        });
+
+        dotsContainer.appendChild(dot);
+        updateAreasDisplay();
+    });
+});
+
+// Get body region based on position
+function getBodyRegion(x, y, view) {
+    // Map x,y percentages to body regions
+    const prefix = view === 'back' ? 'back-' : '';
+
+    // Head region (top center)
+    if (y < 18 && x > 35 && x < 65) {
+        return prefix + 'head';
+    }
+    // Neck region
+    if (y >= 18 && y < 24 && x > 40 && x < 60) {
+        return prefix + 'neck';
+    }
+    // Left arm
+    if (x < 30) {
+        if (y < 35) return 'left-shoulder';
+        if (y < 45) return 'left-upper-arm';
+        if (y < 55) return 'left-forearm';
+        return 'left-hand';
+    }
+    // Right arm
+    if (x > 70) {
+        if (y < 35) return 'right-shoulder';
+        if (y < 45) return 'right-upper-arm';
+        if (y < 55) return 'right-forearm';
+        return 'right-hand';
+    }
+    // Torso
+    if (y >= 24 && y < 40 && x >= 30 && x <= 70) {
+        return prefix + 'chest';
+    }
+    if (y >= 40 && y < 58 && x >= 30 && x <= 70) {
+        return prefix + 'abdomen';
+    }
+    // Left leg
+    if (x >= 30 && x < 50) {
+        if (y >= 58 && y < 75) return 'left-thigh';
+        if (y >= 75 && y < 90) return 'left-calf';
+        return 'left-foot';
+    }
+    // Right leg
+    if (x >= 50 && x <= 70) {
+        if (y >= 58 && y < 75) return 'right-thigh';
+        if (y >= 75 && y < 90) return 'right-calf';
+        return 'right-foot';
+    }
+
+    return prefix + 'general';
+}
+
+// Remove dot by ID
+function removeDot(dotId, view) {
+    placedDots[view] = placedDots[view].filter(d => d.id !== dotId);
+    updateAreasDisplay();
+}
+
+// Clear all dots
+clearDotsBtn.addEventListener('click', function() {
+    placedDots.front = [];
+    placedDots.back = [];
+    document.getElementById('dots-front').innerHTML = '';
+    document.getElementById('dots-back').innerHTML = '';
+    updateAreasDisplay();
+});
+
+// Update the areas count display
+function updateAreasDisplay() {
+    const totalDots = placedDots.front.length + placedDots.back.length;
+
+    if (totalDots === 0) {
+        areasCountDisplay.textContent = 'None';
+        selectAreaBtn.classList.remove('selected');
+        selectAreaBtn.textContent = 'Confirm affected areas';
+    } else {
+        // Get unique body regions
+        const allDots = [...placedDots.front, ...placedDots.back];
+        const uniqueRegions = [...new Set(allDots.map(d => d.bodyRegion))];
+        areasCountDisplay.textContent = `${totalDots} marker${totalDots > 1 ? 's' : ''} (${uniqueRegions.length} area${uniqueRegions.length > 1 ? 's' : ''})`;
+
+        // Update eventData
+        eventData.affectedAreas = allDots.map(d => ({
+            region: d.bodyRegion,
+            view: d.view,
+            x: d.x,
+            y: d.y
+        }));
+
+        selectAreaBtn.classList.add('selected');
+        selectAreaBtn.textContent = `${totalDots} area${totalDots > 1 ? 's' : ''} marked ✓`;
+    }
+}
+
+// Confirm areas button
+selectAreaBtn.addEventListener('click', function() {
+    const totalDots = placedDots.front.length + placedDots.back.length;
+    if (totalDots === 0) {
+        alert('Please tap on the body diagram to mark affected areas');
+    }
 });
 
 // Discomfort level slider
@@ -194,8 +365,8 @@ voiceBtn.addEventListener('click', function() {
 const saveEventBtn = document.getElementById('save-event-btn');
 
 saveEventBtn.addEventListener('click', function() {
-    if (!eventData.affectedArea) {
-        alert('Please select an affected area');
+    if (!eventData.affectedAreas || eventData.affectedAreas.length === 0) {
+        alert('Please mark at least one affected area on the body diagram');
         return;
     }
 
@@ -218,18 +389,27 @@ saveEventBtn.addEventListener('click', function() {
     eventData.timestamp = eventDateTime.toISOString();
     eventData.id = 'event_' + Date.now();
 
+    // Create a summary of affected areas for backward compatibility
+    const uniqueRegions = [...new Set(eventData.affectedAreas.map(a => a.region))];
+    eventData.affectedArea = uniqueRegions.join(', '); // For backward compatibility
+
     // Save to localStorage
     let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
     events.push(eventData);
     localStorage.setItem('healthEvents', JSON.stringify(events));
-    
+
+    // Format affected areas for text file
+    const areasText = eventData.affectedAreas.map(a =>
+        `  - ${formatBodyPartName(a.region)} (${a.view} view)`
+    ).join('\n');
+
     // Still create the text file
     const textContent = `HEALTH EVENT LOG
 ==========================================
 Date & Time: ${eventDateTime.toLocaleString()}
 
-AFFECTED AREA:
-${eventData.affectedArea}
+AFFECTED AREAS (${eventData.affectedAreas.length} markers):
+${areasText}
 
 DISCOMFORT LEVEL: ${eventData.discomfortLevel}/5
 ${getDiscomfortEmoji(eventData.discomfortLevel)}
@@ -254,10 +434,19 @@ ${JSON.stringify(eventData, null, 2)}
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     alert('Event saved successfully! File downloaded and added to calendar.');
     window.location.href = 'index.html';
 });
+
+// Format body part name for display
+function formatBodyPartName(part) {
+    if (!part) return 'Unknown';
+    return part
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
 
 function getDiscomfortEmoji(level) {
     const emojis = {
