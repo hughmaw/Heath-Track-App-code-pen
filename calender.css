@@ -457,3 +457,80 @@ html {
 .delete-btn {
     color: var(--color-danger) !important;
 }
+
+/* Edit button */
+.edit-btn {
+    color: var(--accent-primary) !important;
+}
+
+/* Undo notification */
+.undo-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.undo-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+#undo-message {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.undo-btn {
+    background: var(--accent-primary);
+    color: var(--text-inverse);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.undo-btn:hover {
+    opacity: 0.9;
+}
+
+.dismiss-undo {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.dismiss-undo:hover {
+    color: var(--text-primary);
+}
+
+/* Level display */
+.level-display {
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Action buttons container */
+.action-buttons {
+    display: flex;
+    gap: 4px;
+}

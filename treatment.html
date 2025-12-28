@@ -57,14 +57,32 @@
                     <input type="text" class="input" placeholder="e.g., Daily, Weekly" id="treatment-frequency">
                 </div>
 
-                <div class="form-group">
-                    <label class="label">Length of treatment</label>
-                    <input type="text" class="input" placeholder="e.g., 30 days" id="treatment-length">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="label">Start Date</label>
+                        <input type="date" class="input" id="treatment-start-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">End Date</label>
+                        <input type="date" class="input" id="treatment-end-date">
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="label">Progress (%)</label>
-                    <input type="number" class="input" placeholder="0-100" min="0" max="100" id="treatment-progress" value="0">
+                    <label class="label">Progress (auto-calculated from dates)</label>
+                    <div class="progress-display">
+                        <div class="progress-bar-large">
+                            <div class="progress-fill-large" id="progress-fill-preview" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-percentage" id="progress-percentage">0%</span>
+                    </div>
+                    <p class="progress-hint" id="progress-hint">Set start and end dates to auto-calculate progress</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">Manual Progress Override (%)</label>
+                    <input type="number" class="input" placeholder="Leave empty for auto-calculation" min="0" max="100" id="treatment-progress">
+                    <p class="form-hint">Optional: Override the auto-calculated progress</p>
                 </div>
 
                 <div class="switch-row">

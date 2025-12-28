@@ -1,6 +1,9 @@
 // Calendar state
 let currentDate = new Date();
 let selectedDate = new Date();
+let deletedItems = []; // Stack for undo functionality
+let undoTimeout = null;
+let editingEventId = null;
 
 // Helper function to format body part names
 function formatBodyPart(part) {
@@ -23,12 +26,26 @@ function getDiscomfortLevelEmoji(level) {
     return emojis[level] || `${level}/5`;
 }
 
+// Get level label
+function getLevelLabel(level) {
+    const labels = {
+        1: '1 - Very High',
+        2: '2 - High',
+        3: '3 - Moderate',
+        4: '4 - Low',
+        5: '5 - Minimal'
+    };
+    return labels[level] || `${level}`;
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     renderCalendar();
     loadScheduleForDate(selectedDate);
     loadRecentEvents();
     setupModal();
+    setupEditEventModal();
+    setupUndoNotification();
 });
 
 // Render calendar
@@ -159,16 +176,18 @@ function loadScheduleForDate(date) {
                             <span class="badge">${formatTime(appt.time)}</span>
                             <h3 class="appointment-title">${appt.title}</h3>
                         </div>
-                        <button class="notify-button delete-btn delete-appt-btn" data-id="${appt.id}">
-                            <i data-lucide="trash-2"></i>
-                        </button>
+                        <div class="action-buttons">
+                            <button class="notify-button delete-btn delete-appt-btn" data-id="${appt.id}" title="Delete">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
                     </div>
                     <p class="notes">${appt.notes || 'No notes'}</p>
                 </div>
             `;
         });
 
-        // Show events
+        // Show events with edit button
         dayEvents.forEach(event => {
             const time = new Date(event.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
             const displayType = event.discomfortTypeLabel || event.discomfortType;
@@ -180,9 +199,14 @@ function loadScheduleForDate(date) {
                             <span class="badge event-badge">${time}</span>
                             <h3 class="appointment-title">${displayType}</h3>
                         </div>
-                        <button class="notify-button delete-btn delete-event-btn" data-id="${event.id}">
-                            <i data-lucide="trash-2"></i>
-                        </button>
+                        <div class="action-buttons">
+                            <button class="notify-button edit-btn edit-event-btn" data-id="${event.id}" title="Edit">
+                                <i data-lucide="edit-2"></i>
+                            </button>
+                            <button class="notify-button delete-btn delete-event-btn" data-id="${event.id}" title="Delete">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
                     </div>
                     <p class="notes">
                         <span class="notes-label">Area:</span> ${areaFormatted}<br>
@@ -207,6 +231,13 @@ function loadScheduleForDate(date) {
     document.querySelectorAll('.delete-event-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             deleteEvent(this.getAttribute('data-id'));
+        });
+    });
+
+    // Add edit event listeners
+    document.querySelectorAll('.edit-event-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            openEditEventModal(this.getAttribute('data-id'));
         });
     });
 }
@@ -237,6 +268,14 @@ function loadRecentEvents() {
                         <span class="badge event-badge">${dateStr} ${timeStr}</span>
                         <h3 class="appointment-title">${displayType}</h3>
                     </div>
+                    <div class="action-buttons">
+                        <button class="notify-button edit-btn edit-event-btn" data-id="${event.id}" title="Edit">
+                            <i data-lucide="edit-2"></i>
+                        </button>
+                        <button class="notify-button delete-btn delete-event-btn" data-id="${event.id}" title="Delete">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
                 </div>
                 <p class="notes">
                     <span class="notes-label">Area:</span> ${areaFormatted} |
@@ -248,6 +287,20 @@ function loadRecentEvents() {
     });
 
     document.getElementById('events-list').innerHTML = eventsHTML;
+    lucide.createIcons();
+
+    // Add event listeners for recent events
+    document.querySelectorAll('#events-list .edit-event-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            openEditEventModal(this.getAttribute('data-id'));
+        });
+    });
+
+    document.querySelectorAll('#events-list .delete-event-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteEvent(this.getAttribute('data-id'));
+        });
+    });
 }
 
 // Format time for display
@@ -274,7 +327,7 @@ function setupModal() {
 
     cancelBtn.addEventListener('click', () => {
         modal.style.display = 'none';
-        clearForm();
+        clearAppointmentForm();
     });
 
     saveBtn.addEventListener('click', () => {
@@ -301,35 +354,186 @@ function setupModal() {
         localStorage.setItem('appointments', JSON.stringify(appointments));
 
         modal.style.display = 'none';
-        clearForm();
+        clearAppointmentForm();
         renderCalendar();
         loadScheduleForDate(selectedDate);
         alert('Appointment added successfully!');
     });
 }
 
-function clearForm() {
+function clearAppointmentForm() {
     document.getElementById('appt-date').value = '';
     document.getElementById('appt-time').value = '';
     document.getElementById('appt-title').value = '';
     document.getElementById('appt-notes').value = '';
 }
 
-function deleteAppointment(id) {
-    if (confirm('Delete this appointment?')) {
+// Setup edit event modal
+function setupEditEventModal() {
+    const modal = document.getElementById('edit-event-modal');
+    const saveBtn = document.getElementById('save-edit-event-btn');
+    const cancelBtn = document.getElementById('cancel-edit-event-btn');
+    const levelSlider = document.getElementById('edit-event-level');
+    const levelDisplay = document.getElementById('edit-level-display');
+
+    // Update level display when slider changes
+    levelSlider.addEventListener('input', function() {
+        levelDisplay.textContent = getLevelLabel(parseInt(this.value));
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        editingEventId = null;
+    });
+
+    saveBtn.addEventListener('click', () => {
+        if (!editingEventId) return;
+
+        let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+        const index = events.findIndex(e => e.id === editingEventId);
+
+        if (index !== -1) {
+            const dateValue = document.getElementById('edit-event-date').value;
+            const timeValue = document.getElementById('edit-event-time').value;
+            const newTimestamp = new Date(`${dateValue}T${timeValue}`).toISOString();
+
+            events[index] = {
+                ...events[index],
+                timestamp: newTimestamp,
+                affectedArea: document.getElementById('edit-event-area').value,
+                discomfortLevel: parseInt(document.getElementById('edit-event-level').value),
+                voiceNote: document.getElementById('edit-event-notes').value
+            };
+
+            localStorage.setItem('healthEvents', JSON.stringify(events));
+            modal.style.display = 'none';
+            editingEventId = null;
+            renderCalendar();
+            loadScheduleForDate(selectedDate);
+            loadRecentEvents();
+        }
+    });
+}
+
+// Open edit event modal
+function openEditEventModal(id) {
+    const events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    const event = events.find(e => e.id === id);
+
+    if (!event) return;
+
+    editingEventId = id;
+    const modal = document.getElementById('edit-event-modal');
+    const eventDate = new Date(event.timestamp);
+
+    // Populate form
+    document.getElementById('edit-event-date').value = eventDate.toISOString().split('T')[0];
+    document.getElementById('edit-event-time').value = eventDate.toTimeString().slice(0, 5);
+    document.getElementById('edit-event-area').value = event.affectedArea;
+    document.getElementById('edit-event-level').value = event.discomfortLevel;
+    document.getElementById('edit-level-display').textContent = getLevelLabel(event.discomfortLevel);
+    document.getElementById('edit-event-notes').value = event.voiceNote || '';
+
+    modal.style.display = 'flex';
+}
+
+// Setup undo notification
+function setupUndoNotification() {
+    const undoBtn = document.getElementById('undo-btn');
+    const dismissBtn = document.getElementById('dismiss-undo');
+
+    undoBtn.addEventListener('click', performUndo);
+    dismissBtn.addEventListener('click', hideUndoNotification);
+}
+
+// Show undo notification
+function showUndoNotification(message) {
+    const notification = document.getElementById('undo-notification');
+    document.getElementById('undo-message').textContent = message;
+    notification.classList.add('show');
+
+    // Clear existing timeout
+    if (undoTimeout) {
+        clearTimeout(undoTimeout);
+    }
+
+    // Auto-hide after 5 seconds
+    undoTimeout = setTimeout(() => {
+        hideUndoNotification();
+    }, 5000);
+}
+
+// Hide undo notification
+function hideUndoNotification() {
+    const notification = document.getElementById('undo-notification');
+    notification.classList.remove('show');
+
+    if (undoTimeout) {
+        clearTimeout(undoTimeout);
+        undoTimeout = null;
+    }
+}
+
+// Perform undo
+function performUndo() {
+    if (deletedItems.length === 0) return;
+
+    const lastDeleted = deletedItems.pop();
+
+    if (lastDeleted.type === 'event') {
+        let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+        events.push(lastDeleted.data);
+        localStorage.setItem('healthEvents', JSON.stringify(events));
+    } else if (lastDeleted.type === 'appointment') {
         let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments.push(lastDeleted.data);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+    }
+
+    hideUndoNotification();
+    renderCalendar();
+    loadScheduleForDate(selectedDate);
+    loadRecentEvents();
+}
+
+// Delete appointment with undo
+function deleteAppointment(id) {
+    let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const appointment = appointments.find(appt => appt.id === id);
+
+    if (appointment) {
+        // Store for undo
+        deletedItems.push({ type: 'appointment', data: appointment });
+
+        // Remove from storage
         appointments = appointments.filter(appt => appt.id !== id);
         localStorage.setItem('appointments', JSON.stringify(appointments));
+
+        // Show undo notification
+        showUndoNotification(`Appointment "${appointment.title}" deleted`);
+
         renderCalendar();
         loadScheduleForDate(selectedDate);
     }
 }
 
+// Delete event with undo
 function deleteEvent(id) {
-    if (confirm('Delete this health event?')) {
-        let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
-        events = events.filter(event => event.id !== id);
+    let events = JSON.parse(localStorage.getItem('healthEvents') || '[]');
+    const event = events.find(e => e.id === id);
+
+    if (event) {
+        // Store for undo
+        deletedItems.push({ type: 'event', data: event });
+
+        // Remove from storage
+        events = events.filter(e => e.id !== id);
         localStorage.setItem('healthEvents', JSON.stringify(events));
+
+        // Show undo notification
+        const displayType = event.discomfortTypeLabel || event.discomfortType || 'Event';
+        showUndoNotification(`${displayType} event deleted`);
+
         renderCalendar();
         loadScheduleForDate(selectedDate);
         loadRecentEvents();

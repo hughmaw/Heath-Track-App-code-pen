@@ -63,6 +63,70 @@
         </div>
     </main>
 
+    <!-- Undo Notification -->
+    <div id="undo-notification" class="undo-notification">
+        <span id="undo-message">Event deleted</span>
+        <button id="undo-btn" class="undo-btn">Undo</button>
+        <button id="dismiss-undo" class="dismiss-undo">&times;</button>
+    </div>
+
+    <!-- Edit Event Modal -->
+    <div id="edit-event-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Edit Health Event</h2>
+
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" id="edit-event-date" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Time</label>
+                <input type="time" id="edit-event-time" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Affected Area</label>
+                <select id="edit-event-area" class="form-input">
+                    <option value="head">Head</option>
+                    <option value="neck">Neck</option>
+                    <option value="chest">Chest</option>
+                    <option value="abdomen">Abdomen</option>
+                    <option value="left-shoulder">Left Shoulder</option>
+                    <option value="right-shoulder">Right Shoulder</option>
+                    <option value="left-upper-arm">Left Upper Arm</option>
+                    <option value="right-upper-arm">Right Upper Arm</option>
+                    <option value="left-forearm">Left Forearm</option>
+                    <option value="right-forearm">Right Forearm</option>
+                    <option value="left-hand">Left Hand</option>
+                    <option value="right-hand">Right Hand</option>
+                    <option value="left-thigh">Left Thigh</option>
+                    <option value="right-thigh">Right Thigh</option>
+                    <option value="left-calf">Left Calf</option>
+                    <option value="right-calf">Right Calf</option>
+                    <option value="left-foot">Left Foot</option>
+                    <option value="right-foot">Right Foot</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Discomfort Level (1-5)</label>
+                <input type="range" id="edit-event-level" class="form-input" min="1" max="5" value="3" style="padding: 0;">
+                <div class="level-display" id="edit-level-display">3 - Moderate</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notes</label>
+                <textarea id="edit-event-notes" placeholder="Additional notes..." class="form-textarea"></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="save-edit-event-btn" class="btn-save">Save Changes</button>
+                <button id="cancel-edit-event-btn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Appointment Modal -->
     <div id="appointment-modal" class="modal-overlay">
         <div class="modal-content">
